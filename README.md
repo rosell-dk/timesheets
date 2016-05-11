@@ -33,6 +33,8 @@ When you click "start working", or enter a starttime, an "work_started" notifica
 ## Future
 I am using the timesheet myself, so I expect it to be actively updated. I have however no plans to extend it beyond my own needs. My heart lies at my other project "picoquery". But I am available as a freelancer, and if I am to get paid for it, I'd love to extend this project. My rate for this will be 100 USD per work hour.
 
+Of course, anybody may fork this project, if they wish, or join in as a collaborator.
+
 
 
 
