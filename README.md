@@ -27,15 +27,14 @@ Create excell-like timesheets and let your customers view them
 ## A word about notification of work start
 When you click "start working", or enter a starttime, an "work_started" notification will be <i>scheduled</i> to be sent in a minute. This gives you enough time to make changes before the notification is send (you may for example wish to set the time back a bit, if you didn't start the clock at the exact time you started working). When a minute has passed, the notification will be send the next time cron.php is run. 
 
-## Limitations
-- Currently all interface is in danish, and the project has not been prepared to be translated (yet)
+## Current limitations
+- All interface is in danish, and the project has not been prepared to be translated (yet)
+- No support for multiple people filling in timesheets / owning timesheets.
+- No support for multiple user accounts for the same client. The customer gets a single "account", the employees of the costumer must share that
 
 ## Future
 I am using the timesheet myself, so I expect it to be actively updated. I have however no plans to extend it beyond my own needs. My heart lies at my other project "picoquery". But I am available as a freelancer, and if I am to get paid for it, I'd love to extend this project. My rate for this will be 100 USD per work hour.
 
 Of course, anybody may fork this project, if they wish, or join in as a collaborator.
-
-
-
 
 
