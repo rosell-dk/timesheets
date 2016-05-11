@@ -167,12 +167,12 @@ if ($action == 'set_timesheet') {
       // 'currently_working' changed
 
       if ($update['currently_working'] == 1) {
-        if (!scheduleTimesheetEvent($id, 'timesheet_work_started', 1)) {
+        if (!scheduleTimesheetEvent($id, 'timesheet_work_started', 60)) {
           echo '{"success":false, "errormsg": "' . $mysqli->error . '"}';
         }
       }
       else {
-        if (!scheduleTimesheetEvent($id, 'timesheet_work_stopped', 1)) {
+        if (!scheduleTimesheetEvent($id, 'timesheet_work_stopped', 60)) {
           echo '{"success":false, "errormsg": "' . $mysqli->error . '"}';
         }
       }
