@@ -1,0 +1,108 @@
+DROP TABLE IF EXISTS timesheet_revisions;
+DROP TABLE IF EXISTS timesheets;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS customers;
+
+/*
+CREATE TABLE users (
+    id INT(10) NOT NULL AUTO_INCREMENT,
+    email CHAR(50),
+    password CHAR(40),
+    PRIMARY KEY (id)
+);
+*/
+
+
+CREATE TABLE customers (
+    id INT(10) NOT NULL AUTO_INCREMENT,
+    companyname CHAR(50),
+    login CHAR(50),
+    password CHAR(40),
+    maker_key CHAR(50),
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE timesheets (
+    id INT(10) NOT NULL AUTO_INCREMENT,
+    customer_id INT(10) NOT NULL,
+    title CHAR(40),
+    data TEXT,
+    active BOOL NOT NULL DEFAULT 0,
+    billed BOOL NOT NULL DEFAULT 0,
+    fixed_price BOOL NOT NULL DEFAULT 0,
+    currently_working BOOL NOT NULL DEFAULT 0,    
+    description TEXT,
+    total DECIMAL(7,2),
+    last_starttime CHAR(10),
+    last_endtime CHAR(10),
+    last_task CHAR(90),
+    updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    FOREIGN KEY (customer_id) REFERENCES customers(id)
+);
+
+CREATE TABLE timesheet_revisions (
+    id INT(10) NOT NULL AUTO_INCREMENT,
+    timesheet_id INT(10) NOT NULL,
+    data TEXT,
+    created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    FOREIGN KEY (timesheet_id) REFERENCES timesheets(id)
+);
+
+/* Notification setup for customers */
+CREATE TABLE notifications (
+    customer_id INT(10) NOT NULL,
+    event_type CHAR(40),   /* 'timesheet_created', 'worksession_started' etc */
+    emails CHAR(255),
+    email_template_subject CHAR(255),
+    email_template_body TEXT,
+    maker_key CHAR(50),
+    treshold INT(10) NOT NULL,    
+    FOREIGN KEY (customer_id) REFERENCES customers(id)
+);
+
+
+CREATE TABLE events (
+    id INT(10) NOT NULL AUTO_INCREMENT,
+    event_name CHAR(40),
+    event_description CHAR(40),
+    PRIMARY KEY (id)
+);
+
+INSERT INTO events (event_name, event_description) VALUES
+  ('timesheet_work_started', 'Work started'),
+  ('timesheet_work_ended', 'Work ended');
+
+
+CREATE TABLE email_notifications (
+    customer_id INT(10) NOT NULL,
+    emails CHAR(255),
+    events CHAR(255),
+    FOREIGN KEY (customer_id) REFERENCES customers(id)
+);
+
+/*
+CREATE TABLE email_notifications_events (
+    customer_id INT(10) NOT NULL,
+    event_id INT(10) NOT NULL,
+    FOREIGN KEY (customer_id) REFERENCES customers(id),
+    FOREIGN KEY (event_id) REFERENCES events(id)
+}*/
+
+/* Log notifications sent for timesheet (but only last of type) */
+CREATE TABLE notifications_last_sent (
+    timesheet_id INT(10) NOT NULL,
+    notification_type CHAR(40),   /* 'timesheet_created', 'worksession_started' etc */
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,  
+    FOREIGN KEY (timesheet_id) REFERENCES timesheets(id)     
+);
+
+CREATE TABLE timesheet_event_scheduler (
+    timesheet_id INT(10) NOT NULL,
+    event_type CHAR(40),   /* 'timesheet_created', 'worksession_started' etc */
+    time TIMESTAMP,  
+    FOREIGN KEY (timesheet_id) REFERENCES timesheets(id)     
+);
+
+

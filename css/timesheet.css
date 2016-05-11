@@ -1,0 +1,94 @@
+body {padding:0; margin:0}
+input {width: 100px; border: 1px solid #ccc; padding:2px 5px;}
+
+.no-select {-moz-user-select: none;-khtml-user-select: none;-webkit-user-select: none;-ms-user-select: none;user-select: none;}
+
+html, body {height: 100%; padding:0; margin:0}
+body > table {height: 100%; width: 100%}
+body > table > tbody > tr > td {padding: 20px; vertical-align: top}
+
+.blink.hidden {visibility: hidden;}
+
+#col2 { padding-left: 30px; vertical-align: top; min-width: 600px}
+#col2 > table:first-child {width: 100%}
+#col2 > table:first-child td:last-child {text-align: right; vertical-align: top; padding-top: 18px; padding-right: 2px}
+
+pre {font-family:monospace; padding: 10px; border: 1px solid #666; background-color: #eee}
+table {border-collapse: collapse;}
+h1 {font-size: 1.6em}
+h3 {font-size: 1.2em}
+h3 .subheader {font-size: 0.7em; display: block; padding-top: 4px; font-weight: normal}
+
+/* Timesheet list */
+#col1 {min-width: 160px; max-width: 300px; border-right: 1px solid #ccc; min-height:100%; vertical-align: top}
+#col1 {vertical-align: top}
+#col1 .timesheet-link {padding:5px 0px; margin: 0;cursor: pointer; display: block;}
+
+#col2 {
+  /*display: none;*/
+  visibility: hidden;
+}
+.timesheet-description {
+  margin-bottom: 15px;
+}
+
+/* Sheet */
+#sheet {width: 100%;}
+#sheet input {display: block; border: 0px solid gold}
+.starttime, .endtime, .usedtime, #total {text-align: right;}
+input.starttime, input.endtime, .starttime-col, .endtime-col {width: 60px;}
+input.date {width: 90px;}
+input.usedtime {width: 80px}
+input.task {width: calc(100% - 10px)}
+input.note {width: calc(100% - 10px)}
+td.usedtime-col {width: 80px}
+td.date-col {width: 90px}
+input.category {width: 240px}
+input#total {width: 60px}
+td.starttime, td.endtime {min-width: 60px;}
+td.usedtime {min-width: 80px;}
+td.category {min-width: 240px}
+#sheet td { border: 1px solid #ddd; vertical-align: top; padding:0}
+#sheet td.operations {border: none; padding-left: 5px;}
+#sheet .remove {cursor: pointer; font-size: 0.85em; font-family: sans-serif; color: #cc1111; }
+#sheet .insert {cursor: pointer; font-size: 0.85em; font-family: sans-serif; color: #11aa11; margin-left: 4px}
+#sheet th {font-weight: normal; font-style: normal; font-size: 0.6em; padding-left: 6px; text-transform: uppercase; color: #333; text-align: left; border: 1px solid #ddd; border-bottom: 1px solid #666; background-color: #eee; padding-top: 4px; padding-bottom: 4px}
+#sheet td pre {margin-top: 0px}
+#sheet input, #sheet td.inp {background-color: white;color: #666;}
+#sheet input[readonly], #sheet td.inp.readonly {background-color: #eee}
+#template_row {display: none;}
+#sheet tr:last-child td.operations * {display: none;}
+#total {background-color: white;color: #333;}
+#sheet td.inp {font-size:0.75em; padding: 3px 7px;}
+#sheet input.endtime.work-continues, #sheet td.endtime.work-continues {color: #aaa}
+
+/* task breakdown */
+#breakdown-output {color: #333}
+#breakdown-output table {}
+#breakdown-output td {padding: 2px 5px; vertical-align: top}
+#breakdown-output td:first-child {padding-right: 20px; padding-left:0}
+#breakdown-output td:last-child {text-align:right;}
+#breakdown-output hr {height: 1px; border:none; background-color: black}
+#breakdown-output tr.task.last td {padding-bottom: 7px}
+#breakdown-output tr.unspecified td {border-top: 1px dotted black; padding-top: 7px; padding-bottom: 7px}
+#breakdown-output tr.total td {border-bottom: 3px double black;border-top: 1px solid black; padding-top: 7px; padding-bottom: 7px}
+
+/* Log out */
+#logout {position:absolute; right: 12px; top: 4px; cursor: pointer; font-size: 0.9em}
+
+#admin_links {margin-top: 10px}
+#admin_links > div {padding: 5px 0; cursor: pointer}
+
+/* Dialog: Manage notifications */
+#dialog_manage_notifications {}
+#dialog_manage_notifications label {display: block; margin-top: 10px}
+#dialog_manage_notifications input {
+  padding-left: 5px;
+  width: 440px;
+}
+#dialog_manage_notifications select {
+  display: block;
+  margin-bottom: 10px;
+  min-width: 452px;
+}
+

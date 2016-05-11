@@ -1,0 +1,185 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Custom datatype parser</title>
+
+<script src="../formula.js"></script>
+
+<!-- We use jQuery for the "bind" method in our second cell-parser example -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+
+<!-- For convenience add an initializer, allowing us to specify formulas in the data-formula attribute of input fields -->
+<script src="../library/initializers/data-formula-attr.js"></script>
+<script src="../library/initializers/data-formula-attr-show-formula-on-hover.js"></script>
+
+<script src="../library/referencetypes/InputReference.js"></script>
+
+<script>
+Formula.addFunction('ADD_TWO_NUMBERS', function(a, b) {
+  return a+b;
+});
+
+Formula.addFunction('CONCAT_TWO_STRINGS', function(a, b) {
+  return a+b;
+});
+
+// Add PI-parser
+Formula.addParser(function(text) {
+  if (text == 'PI') {
+    return Math.PI;
+  }
+});
+
+// Add Cell reference-parser (reacts on texts like: 'A1', 'AB11')
+// We return a Reference. That handles the magic of cells being 'live'
+// Expects there to be an input with such id. returns the value of that input
+Formula.addParser(function(text) {
+  var re = /^([A-Z]+)([1-9][0-9]*|[1-9])$/
+  var result = re.exec(text);
+  if (result !== null) {
+    var elm = document.getElementById(text);
+    if (elm) {
+
+      return {
+        getValue: function () {
+          return parseFloat(elm.value);
+        },
+        setChangeCallback: function(changeCallback) {
+          $(elm).bind("change", changeCallback);
+        },
+        removeChangeCallback: function(changeCallback) {
+          $(elm).off("change", changeCallback);
+        }
+      }
+    }
+  }
+});
+
+//Formula.parseFormula2('SUM(14,DYT(18,19))');
+//var f = Formula.parseFormula('CONCAT_TWO_STRINGS("hej ","""the guy""")');
+//alert(f.calc());
+//alert('""hej""'.replace(/""/g, '"'));
+</script>
+
+<style>
+  body {max-width: 1200px; padding:2% 5%}
+  label {margin-right: 10px; min-width: 190px; display: inline-block;}
+  i {font-size: 0.9em}
+  table {border-collapse: collapse}
+  input {width: 200px; margin-right: 10px;}
+  pre {font-family:monospace; padding: 10px; border: 1px solid #666; background-color: #eee}
+  .subheading {font-size: 0.8em; font-weight: normal}
+  .monospace {font-family:monospace;}
+  table input {width: 50px}
+  input[readonly] {background-color: #eee}
+
+</style>
+</head>
+<body>
+<h3>Formula.addParser(parserFn, weight)</h3>
+<p>
+formula has a method "addParser" which can be used to add support for other datatypes than the build in.
+In fact formula itself uses this method to add support for the basic types (number, string, boolean)
+
+<h3>Example: PI parser</h3>
+Lets try it out. Here is a function which parses "PI"
+
+<pre>
+// Add PI-parser
+Formula.addParser(function(text) {
+  if (text == 'PI') {
+    return Math.PI;
+  }
+  // Make sure not returning anything when there is no match
+  // This will allow the next parser in line to try parsing
+});
+</pre>
+
+<p>With this in place, we can use "PI" in formulas:</p>
+PI + 2: <input data-formula="ADD_TWO_NUMBERS(PI,2)" readonly></input><br>
+
+<p>If you for some reason want to replace a build in parser, you can call Formula.addParser with the optional <i>weight</i> parameter set to 0</p>
+
+<h3>Example: Cell reference parser</h3>
+<pre>
+// Add Cell reference-parser (reacts on texts like: 'A1', 'AB11')
+// Expects there to be an input with such id. returns the value of that input, converted to number
+Formula.addParser(function(text) {
+  var re = /^([A-Z]+)([1-9][0-9]*|[1-9])$/
+  var result = re.exec(text);
+  if (result !== null) {
+    var elm = document.getElementById(text);
+    if (elm) {
+      return parseFloat(elm.value);
+    }
+  }
+});
+</pre>
+
+<h3>Example: Dynamic Cell references</h3>
+<p>The function defined above does not make the grid "alive".
+IF you want your variables to be bound, you can return an object, which has a <i>getValue</i> method for getting the current value, and a <i>setChangeCallback</i> method for attaching the change handler. Preferably also a <i>removeChangeCallback</i> method.
+</p>
+
+<pre>
+// Add Cell reference-parser (reacts on texts like: 'A1', 'AB11')
+// We return a Reference. That handles the magic of cells being 'live'
+// Expects there to be an input with such id. returns the value of that input
+Formula.addParser(function(text) {
+  var re = /^([A-Z]+)([1-9][0-9]*|[1-9])$/
+  var result = re.exec(text);
+  if (result !== null) {
+    var elm = document.getElementById(text);
+    if (elm) {
+
+      return {
+        getValue: function () {
+          return parseFloat(elm.value);
+        },
+        setChangeCallback: function(changeCallback) {
+          $(elm).bind("change", changeCallback);
+        },
+        removeChangeCallback: function(changeCallback) {
+          // TODO: do not depend on jQuery
+          $(elm).off("change", changeCallback);
+        }
+      }
+    }
+  }
+});
+</pre>
+
+<p>Lets try it out!</p>
+<table>
+  <tr>
+    <td></td>
+    <td>A</td>
+    <td>B</td>
+  </tr>  
+  <tr>
+    <td>1</td>
+    <td><input type="text" id="A1" value="3"></input></td>
+    <td><input type="text" id="B1" value="5"></input></td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td><input type="text" id="A2" value="7"></input></td>
+    <td><input type="text" id="B2" value=""></input></td>
+  </tr>
+</table>
+
+<p>With this little cell-reference-parser we can create formulas like this:</p>
+ADD_TWO_NUMBERS(A1,A2): <input data-formula="ADD_TWO_NUMBERS(A1,A2)" readonly></input><br>
+
+<h3>Restrictions</h3>
+<ul>
+  <li>Your expression may not look like a number. That is, it may start with +,- or a digit</li>
+  <li>Your expression may not look like a string. That is, it may start with "</li>
+  <li>Your expression may not look like a boolean. That is, it may not equal TRUE or FALSE</li>
+  <li>Your expression may not contain "(", ")" or ","</li>
+</ul>
+</body>
+</html>

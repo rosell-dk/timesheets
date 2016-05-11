@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moment demo</title>
+
+<script src="../formula.js"></script>
+
+<!-- the Moment functions requires momentjs -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment.min.js"></script>
+<script src="../library/datatypes/Moment.js"></script>
+
+<!-- InputById requires jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="../library/referencetypes/InputById.js"></script>
+
+<!-- For convenience add an initializer, allowing us to specify formulas in the data-formula attribute of input fields -->
+<script src="../library/initializers/data-formula-attr.js"></script>
+<script src="../library/initializers/data-formula-attr-show-formula-on-hover.js"></script>
+
+<script>
+
+// Set default format
+moment.defaultFormat = 'MM-DD-YYYY';
+
+// Override the toString method of moment, so it uses the format() method, which respects defaultFormat
+// For us, its more useful that way...
+// (discussions here: https://github.com/moment/moment/issues/1018)
+moment.prototype.toString = function() {
+  return this.format();
+}
+
+Formula.addFunction('IF', function(test, then, otherwise) {
+  return (test ? then : otherwise);
+});
+
+Formula.addFunction('OBJECT', function() {
+  var o = {};
+  for (var i=0; i<arguments.length; i=i+2) {
+    o[i] = o[i+1];
+  }
+  return o;
+});
+
+</script>
+
+<style>
+  body {max-width: 1200px; padding:2% 5%}
+  label {margin-right: 10px; min-width: 190px; display: inline-block;}
+  i {font-size: 0.9em}
+  table {border-collapse: collapse}
+  input {width: 160px; text-align:right; margin-right: 10px;}
+  inlinecode {font-family: monospace}
+  input[readonly] {background-color: #eee}
+</style>
+</head>
+<body>
+<h2>Examples of MOMENT functions</h2>
+<h3>Creating a moment</h3>
+<p>The MOMENT function reflects the moment constructor - the arguments are simply passed. The constructor has several signatures. A lot! You can read the full details in the moment docs <a href="http://momentjs.com/docs/#/parsing/">here</a></p>
+<p>Here is a couple of examples:</p>
+
+<p>MOMENT() returns current date/time</p>
+<input data-formula='MOMENT()' readonly></input><br>
+
+<p>MOMENT(date [String], format [String]) returns <i>date</i> parsed leniently according to <i>format</i></p>
+<input data-formula='MOMENT("2016-12-31", "YYYY-MM-DD")' readonly></input><br>
+
+<p>MOMENT(date [String], format [String], true) returns <i>date</i> parsed strictly according to <i>format</i></p>
+<input data-formula='MOMENT("2016-12-24", "YYYY-MM-DD", TRUE)' readonly></input></i><br>
+
+<p>MOMENT(units [Object]) returns a moment with year set to units["year"], seconds set to units["seconds"], etc. (We have added an "OBJECT" function in this demo, in order to be able to pass an object)</p>
+<input data-formula='MOMENT(OBJECT("year",2016,"month",1,"day",5))' readonly></input><br>
+
+
+<h3>Formatting a moment</h3>
+<p>For full syntax of formatting, head over here: <a href="http://momentjs.com/docs/#/displaying/">http://momentjs.com/docs/#/displaying/</a></p>
+<p>Here are a couple of examples</p>
+<input data-formula='MOMENT_FORMAT(MOMENT(),"DD-MM-YYYY")' readonly></input><br>
+<input data-formula='MOMENT_FORMAT(MOMENT(),"DD-MM-YYYY MM:hh:ss")' readonly></input><br>
+<input data-formula='MOMENT_FORMAT(MOMENT(),"Do [of] MMMM [in gods year] YYYY")' readonly style="width:200px"></input><br>
+<p>If no format is provided, momentjs will use the default format, which can be set up by setting <i>moment.defaultFormat</i>. In this demo, we have set the defaultFormat to "MM-DD-YYYY"</p>
+
+
+<h3>Getting parts of a moment</h3>
+<p>The MOMENT_GET returns a unit of the moment. Available units: 'year', 'month', 'date', 'hour', 'minute', 'second', 'millisecond'</p>
+<input data-formula='MOMENT_GET(MOMENT(), "hours")' readonly></input><br>
+<p>For convenience, we have added YEAR, MONTH and DAY as well</p>
+<input data-formula='MOMENT_YEAR(MOMENT())' readonly></input><br>
+<input data-formula='MOMENT_MONTH(MOMENT())' readonly></input><br>
+<input data-formula='MOMENT_DATE(MOMENT())' readonly></input><br>
+
+<h3>Setting parts of a moment</h3>
+<p>The counterpart of the above...</p>
+
+<p>Set date to first of current month:</p>
+<input data-formula='MOMENT_SET(MOMENT(), "date", 1)' readonly></input><br>
+
+<h3>Adding units to a moment</h3>
+<p>Here, we add 1 day to current date, and format it</p>
+<input data-formula='MOMENT_FORMAT(MOMENT_ADD(MOMENT(), 1, "days"), "DD MMM YYYY")' readonly></input><br>
+
+<!--
+<h3>Stricter parsing</h3>
+<p>MOMENT_CAN_PARSE_STRICT(text, pattern) tests more strictly whether a date string complies to a pattern.
+These will return boolean true:</p>
+MOMENT_CAN_PARSE_STRICT('12-24-2014', 'MM-DD-YYYY') <br>
+MOMENT_CAN_PARSE_STRICT('2/14-2014', 'M/D-YYYY') <br>
+MOMENT_CAN_PARSE_STRICT('banana 2/24 2014', 'banana M/DD YYYY')<br>
+<p>These will return false:</p>
+MOMENT_CAN_PARSE_STRICT('2/14/2014', 'M-D-YYYY') <br>
+MOMENT_CAN_PARSE_STRICT('02-14-2014', 'M-D-YYYY') <br>
+MOMENT_CAN_PARSE_STRICT('2-14-2014', 'MM-D-YYYY') <br>
+MOMENT_CAN_PARSE_STRICT('02-02-2014', 'MM-D-YYYY') <br>
+MOMENT_CAN_PARSE_STRICT('02-32-2014', 'MM-DD-YYYY') <br>
+<p>Note: ONLY the following tokens are supported: MM, DD, YYYY, D, M</p>
+<p>Note: DD accepts 01, 02, .. 31. So it accepts '31' even for months that do not have 31 days in them.</p>
+
+Test this date string: <input id="parse_date" value="12-24-2018"></input><br>
+against this format:  <input id="parse_format" value="MM-DD-YYYY"></input><br>
+Result: <input data-formula="IF(MOMENT_CAN_PARSE_STRICT(#parse_date, #parse_format), 'ok', 'not ok')' readonly></input><br><br>
+Result as date: <input data-formula="IF(MOMENT_CAN_PARSE_STRICT(#parse_date, #parse_format), MOMENT_FORMAT(MOMENT(#parse_date, #parse_format), 'DD MMM YYYY'), 'whopsie - not a wellformatted date')' readonly></input><br>Formula:<br>
+<!--<input data-formula='MOMENT_FORMAT(MOMENT_STRICT_PARSE(#parse_date, #parse_format), 'DD MMM YYYY')' readonly></input><i></i><br>-->
+
+
+
+
+<h3>Not more?</h3>
+momentjs has much more functionality than utilized by the few functions I have added. You are very welcome to help adding more functions. Or you can pay me to do so (you can reach me here: <a href="http://rosell.dk/contact">http://rosell.dk/contact</a>).
+
+</body>
+</html>

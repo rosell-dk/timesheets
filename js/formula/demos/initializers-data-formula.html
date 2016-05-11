@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>formula demo</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="../formula.js"></script>
+<script src="../library/referencetypes/InputById.js"></script>
+<script>
+
+
+Formula.addFunction('ADD_TWO_NUMBERS', function(a, b) {
+  return parseFloat(a)+parseFloat(b);
+})
+
+jQuery(function() {
+
+  $('[data-formula]').each(function() {
+    var $field = $(this);
+    var formula = new Formula($(this).attr('data-formula'), function() {
+      var oldValue = $field.val();
+      $field.val(formula.calc());
+      if (oldValue != $field.val()) {
+        // Trigger change, in case another formula is listening
+        $field.trigger('change');
+      }      
+    });
+    formula.s = $(this).attr('data-formula');
+
+    $field.val(formula.calc());
+  });
+
+});
+
+</script>
+<style>
+  body {max-width: 1200px; padding:2% 5%}
+  label {margin-right: 10px; min-width: 150px; display: inline-block;}
+  pre {font-family:monospace; padding: 10px; border: 1px solid #666; background-color: #eee}
+  i {font-size: 0.9em}
+  input[readonly] {background-color: #eee}
+</style>
+</head>
+<body>
+
+  <p>
+  Here is a little demo which shows you how to convieniently create calculated fields.
+
+  The formulas below have been set in a "data-formula" attribute of the input fields. The fields are recalculated dynamically, when the value of a referenced field changes.</p>
+
+  <div>    
+    <label for="formula1">formula1:</label>
+    <input id="formula1" data-formula="ADD_TWO_NUMBERS(10,11)" readonly></input>
+    <i>Formula: ADD_TWO_NUMBERS(10,11)</i>
+  </div>
+  <div>
+    <label for="formula2">formula2:</label>
+    <input id="formula2" data-formula="ADD_TWO_NUMBERS(12,#formula1)" readonly></input>
+    <i>Formula: ADD_TWO_NUMBERS(12,#formula1)</i>
+  </div>
+  <div>
+    <label for="custom_number">Custom number:</label>
+    <input id="custom_number" value="0"></input>
+  </div>
+  <div>
+    <label for="formula3">formula3:</label>
+    <input id="formula3" data-formula="ADD_TWO_NUMBERS(#formula2,#custom_number)" readonly></input>
+    <i>Formula: ADD_TWO_NUMBERS(#formula2,#custom_number)</i>
+  </div>
+
+  <p>All that is required to set this up this is the following script:</p>
+  <pre>
+jQuery(function() {
+  $('[data-formula]').each(function() {
+    var $field = $(this);
+    var formula = new Formula($(this).attr('data-formula'), function() {
+      $field.val(formula.calc());
+    });
+    $field.val(formula.calc());
+  });
+});
+  </pre>
+
+  <p>If you also want formulas referencing formulas dynamically recalculated, you can do it like this:</p>
+  <div>
+    <label for="formula4">formula4:</label>
+    <input id="formula4" data-formula="#formula3" readonly></input>
+    <i>Formula: #formula3</i>
+  </div>
+  
+  <pre>  
+  $('[data-formula]').each(function() {
+    var $field = $(this);
+    var formula = new Formula($(this).attr('data-formula'), function() {
+      var oldValue = $field.val();
+      $field.val(formula.calc());
+      if (oldValue != $field.val()) {
+        // Trigger change, in case another formula is listening
+        $field.trigger('change');
+      }      
+    });
+    formula.s = $(this).attr('data-formula');
+
+    $field.val(formula.calc());
+  });
+  </pre>
+
+  <p>The script above is in the library. So to get this functionality, you can alternatively just add something like this to your HTML:</p>
+
+  <pre>&lt;script src="library/initializers/data-formula-attr.js">&lt;/script></pre>
+  <p>(but cool kids concatenate their scripts)</p>
+
+
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>jQueryNodeSelector demo</title>
+
+<script src="../formula.js"></script>
+
+<!-- jQueryNodeSelector requires jquery, obviously (or picoquery) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="../library/referencetypes/jQueryNodeSelector.js"></script>
+
+<!-- For convenience add an initializer, allowing us to specify formulas in the data-formula attribute of input fields -->
+<script src="../library/initializers/data-formula-attr.js"></script>
+<script src="../library/initializers/data-formula-attr-show-formula-on-hover.js"></script>
+<script>
+
+// Add some functions
+// ------------------
+
+Formula.addFunction('SUM', function() {
+  var result=0; i=arguments.length;
+  while (i>0) {
+    i--;
+    result+=parseFloat(arguments[i]);
+  }
+  return result;
+});
+
+Formula.addFunction('IF', function(test, then, otherwise) {
+  return (test ? then : otherwise);
+});
+
+
+
+
+</script>
+<style>
+  body {max-width: 1200px; padding:2% 5%}
+  label {margin-right: 10px; min-width: 190px; display: inline-block;}
+  pre {font-family:monospace; padding: 10px; border: 1px solid #666; background-color: #eee}
+  i {font-size: 0.9em}
+  table {border-collapse: collapse}
+  table td {border: 1px solid black; padding: 5px 10px;}
+  table td[colspan] {border: 0px solid gold; padding: 20px 0 10px 0}
+  #multipleelements input {width: 50px; text-align:right}
+  input[readonly] {background-color: #eee}
+</style>
+</head>
+<body>
+<p>With jQueryNodeSelector you can select dom nodes with jQuery expressions. It can be used to get values from form elements such as input, select, radiobutton, checkbox and textarea. It can even be used to select multiple elements</p>
+<p>The prefix for this reference type is: "$[". You can for example reference an element by id like this: $['#the_id']. You may also use double quotes: $["#the_id"].</p>
+<p>Here are some examples</p>
+<div id="multipleelements">
+  <h3>Referencing multiple elements</h3>
+  <div>
+    <label for="apples">#apples in basket</label>
+    <input id="apples" value="10" class="fruit"></input>
+  </div>
+  <div>
+    <label for="oranges">#oranges in basket</label>
+    <input id="oranges" value="8" class="fruit"></input>
+  </div>
+  <div>
+    <label for="pears">#pears in basket</label>
+    <input id="pears" value="8" class="fruit"></input>
+  </div>
+  <div>
+    <label for="cars">#cars in basket</label>
+    <input id="cars" value="100"></input>
+  </div>
+  <div><hr></div>
+
+  <div>
+    <label for="fruits">#fruits in basket</label>
+    <input name="fruits" id="fruits" data-formula="SUM($['.fruit'])" readonly></input>
+    <i>Formula: SUM($['.fruit'])</i>
+  </div>
+  <div>
+    <label for="items">#items in basket</label>
+    <input name="items" id="items" data-formula="SUM($['.fruit'], $['#cars'])" readonly></input>
+    <i>Formula: SUM($['.fruit'], $['#cars'])</i>
+  </div>
+</div>
+
+<h3>Examples with various input types</h3>
+<table>
+  <tr>
+    <td>text input, by id</td>
+    <td>$['#text_input']</td>
+    <td><input type="text" id="textinputid" value="some text"></input></td>
+    <td><input data-formula="$['#textinputid']" readonly></input></td>
+  </tr>
+  <tr>
+    <td>text input, by name</td>
+    <td>$['[name=textinput2']</td>
+    <td><input type="text" name="textinput2" value="some text"></input></td>
+    <td><input data-formula="$['[name=textinput2']" readonly></input></td>
+  </tr>
+  <tr>
+    <td>dropdown select</td>
+    <td>$['#fav_fruit']</td>
+    <td><select id="fav_fruit"><option value="apples">Apples</option><option value="oranges">Oranges</option></select></td>
+    <td><input data-formula="$['#fav_fruit']" readonly></input></td>
+  </tr>
+  <tr>
+    <td colspan=4>For checkboxes and radiobuttons, a boolean is returned indicating if its checked or not. So we need a formula:</td>
+  <tr>
+    <td>checkbox</td>
+    <td>IF($['#newsletter'],'checked', 'not checked')</td>
+    <td><input type="checkbox" id="newsletter"></input></td>
+    <td><input data-formula="IF($['#newsletter'],'checked', 'not checked')" readonly></input></td>
+  </tr>
+  <tr>
+    <td>radiobutton</td>
+    <td>IF($['#radiobtn'],'stuck', 'not pressed')</td>
+    <td><input type="radio" id="radiobtn"></input></td>
+    <td><input data-formula="IF($['#radiobtn'],'stuck', 'not pressed')" readonly></input></td>
+  </tr>
+  <tr>
+    <td colspan=4>Radiobutton groups are not supported. But you can get around it with some nested IF's:</td>
+  <tr>
+  <tr>
+    <td>radiobuttons</td>
+    <td>IF($['#male_id'], 'male', IF($['#female_id'], 'female', IF($['#other_id'], 'other', '')))</td>
+    <td><input type="radio" name="gender" value="male" id="male_id">Male</input><br><input type="radio" name="gender" value="female" id="female_id">Female</input><br><input type="radio" name="gender" value="other" id="other_id">Other</input></td>
+    <td><input data-formula="IF($['#male_id'], 'male', IF($['#female_id'], 'female', IF($['#other_id'], 'other', '')))" readonly></input></td>
+  </tr>
+</table>
+<h3>Caveats</h3>
+<p>Be aware that the references and their event handlers are set up on parse time. If you for example add an input, which meets a certain criteria after the formula have been parsed, it will be part of the formula. If this is something you want to do, you can consider these options:</p>
+<ul>
+  <li>Use a custom function instead, ie "ELEMENTS_BY_CLASSNAME". Functions are executed each time calc() is executed.</li>
+  <li>Create a new formula object and use that instead</li>
+  <li>Extend formula to add a "recompile" method, which removes eventhandlers, reparses the formula and adds eventhandlers again. And then call 'recompile' on your affected formulas</li>
+</ul>
+
+</body>
+</html>

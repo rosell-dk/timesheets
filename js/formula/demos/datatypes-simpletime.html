@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SimpleTime demo</title>
+
+<script src="../formula.js"></script>
+
+<!-- The datatype and related functions that we are demonstrating here -->
+<script src="../library/datatypes/SimpleTime.js"></script>
+
+<!-- InputById requires jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="../library/referencetypes/InputById.js"></script>
+
+<!-- For convenience add an initializer, allowing us to specify formulas in the data-formula attribute of input fields -->
+<script src="../library/initializers/data-formula-attr.js"></script>
+<script src="../library/initializers/data-formula-attr-show-formula-on-hover.js"></script>
+
+<script>
+
+// Set default format
+SimpleTime.defaultFormat = 'HH:mm';
+SimpleTime.defaultParseFormat = 'H:mm';
+
+
+</script>
+
+<style>
+  body {max-width: 1200px; padding:2% 5%}
+  label {margin-right: 10px; min-width: 190px; display: inline-block;}
+  i {font-size: 0.9em}
+  table {border-collapse: collapse}
+  input {width: 100px; text-align:right; margin-right: 10px;}
+  inlinecode {font-family: monospace}
+  input[readonly] {background-color: #eee}
+</style>
+</head>
+<body>
+<h2>Examples of SimpleTime functions</h2>
+<p>To view the formula behind a field, mouse over it.</p>
+
+<h3>Creating a SimpleTime</h3>
+<p>SIMPLETIME(hours, minutes) will get you a SimpleTime object.</p>
+<input data-formula="SIMPLETIME(23,59)" readonly></input><br>
+
+<p>SIMPLETIME_NOW() will get you current time</p>
+<input data-formula="SIMPLETIME_NOW()" readonly></input><br>
+
+<h3>Formatting</h3>
+
+<p>
+To format a SimpleTime, use SIMPLETIME_FORMAT(time [SimpleTime], format [String]). You can use the tokens: HH, mm.
+</p>
+HH-mm: <input data-formula='SIMPLETIME_FORMAT(SIMPLETIME_NOW(), "HH-mm")' readonly></input><br>
+
+<p>
+You can set up a defalt format by setting SimpleFormat.defaultFormat. In this demo, it has been set to 'HH:mm'.
+To format a time using the default format, simply calling SIMPLETIME_FORMAT(time [SimpleTime]):
+</p>
+Using default format: <input data-formula="SIMPLETIME_FORMAT(SIMPLETIME_NOW())" readonly></input><br>
+<p>
+But as the toString method of SimpleTime returns the time formatted using default format, often, there will be no need to do that.
+</p>
+You can simplify the above formula to: <input data-formula="SIMPLETIME_NOW()" readonly></input><br>
+
+
+<h3>Parsing</h3>
+<p>
+To parse a SimpleTime, use SIMPLETIME_PARSE(time[String], format[String]). You can use the tokens: HH, mm
+</p>
+Examples:<br>
+<input data-formula='SIMPLETIME_PARSE("23:58", "HH:mm")' readonly></input><br>
+<input data-formula='SIMPLETIME_PARSE("23 59", "HH mm")' readonly></input><br>
+Omitting minutes: <input data-formula='SIMPLETIME_PARSE("23", "HH")' readonly></input><br>
+
+<p>If parse fails, you will get a SimpleTime object which represents an invalid time.</p>
+Formatting an invalid time results in the string 'Invalid time' (you can change this by setting SimpleTime.invalidTime)
+
+<p>Example:
+Parse error: <input data-formula='SIMPLETIME_PARSE("nonsense", "HH:mm")' readonly></input><br>
+Non-existent time: <input data-formula='SIMPLETIME_PARSE("24:00", "HH:mm")' readonly></input><br>
+</p>
+
+<p>You can test if a time is valid with SIMPLETIME_IS_VALID:
+<input data-formula='SIMPLETIME_IS_VALID(SIMPLETIME_PARSE("nonsense", "HH:mm"))' readonly></input>
+</p>
+
+<p>Not tired out yet? try more parsing below:</p>
+Parse this time: <input id="try_time" value="23:59"></input><br>
+Using this format: <input id="try_format" value="HH:mm"></input><br>
+Result: <input data-formula="SIMPLETIME_PARSE(#try_time, #try_format)"></input><br>
+
+
+
+<h3>Getter/setter methods</h3>
+<p>Use SIMPLETIME_HOURS([SimpleTime]) to get the hours and SIMPLETIME_MINUTES([SimpleTime]) to get the minutes.</p>
+Examples:
+<table>
+<tr><td>SIMPLETIME_HOURS</td><td><input data-formula="SIMPLETIME_HOURS(SIMPLETIME_NOW())" readonly></input></td></tr>
+<tr><td>SIMPLETIME_MINUTES</td><td><input data-formula="SIMPLETIME_MINUTES(SIMPLETIME_NOW())" readonly></input></td></tr>
+</table>
+</table>
+
+<h3>Subtracting times</h3>
+<p>You can subtract two times with SIMPLETIME_SUBTRACT</p>
+Time left of today: <input data-formula="SIMPLETIME_SUBTRACT(SIMPLETIME(0,0),SIMPLETIME_NOW())" readonly></input><br>
+Time from 23:20 to 00:14: <input data-formula="SIMPLETIME_SUBTRACT(SIMPLETIME(0,14),SIMPLETIME(23,20))" readonly></input><br>
+
+</body>
+</html>

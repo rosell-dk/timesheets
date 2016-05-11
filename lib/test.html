@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>Moment Datepicker</title>
+
+
+    <script src="Moment%20Datepicker_files/jquery-2.js" type="text/javascript"></script>
+    <script src="Moment%20Datepicker_files/moment.js" type="text/javascript"></script>
+    <script src="Moment%20Datepicker_files/knockout-2.js" type="text/javascript"></script>
+
+    <link href="Moment%20Datepicker_files/datepicker.css" rel="stylesheet">
+    <script src="Moment%20Datepicker_files/moment-datepicker.js"></script>
+
+    <script src="Moment%20Datepicker_files/site.js" type="text/javascript"></script>
+</head>
+<body>
+    <div>
+        <div class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="https://makingsense.github.io/moment-datepicker/index.html">Home</a></li>
+                        <li><a href="https://github.com/makingsense/moment-datepicker/">Source Code</a></li>
+                        <li><a href="https://nuget.org/packages/MomentDatepicker">NuGet Package</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <section id="typeahead">
+                <div class="page-header">
+                    <h1>Moment Datepicker</h1>
+                    <p class="lead">The best bootstrap datepicker!</p>
+                    <p>Original code from <a href="http://www.eyecon.ro/bootstrap-datepicker/">Stefan Petre</a>. I also took things from <a href="https://github.com/eternicode/bootstrap-datepicker">Andrew Rowls</a> and <a href="https://github.com/Aymkdn/Datepicker-for-Bootstrap">Aymeric Kodono</a>.</p>
+                    <p>Moment Datepicker is ready to work with Knockout,
+ TypeScript and NuGet. It uses Moment.js to parse dates and to localize 
+the literals, and Twitter-Bootstrap (2 or 3) to ensure a nice 
+appearance.</p>
+                </div>
+            </section>
+        </div>
+
+        <div class="container">
+            <section>
+                <h2>Example</h2>
+                <p>Attached to a field with the format specified via options.</p>
+                <div class="well">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <input class="form-control" value="01-21-2015" id="dp1" type="text">
+                        </div>
+                    </div>
+                </div>
+                <p>Using KnockOut.js ISO-8601 binding.</p>
+                <div class="well">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <input value="02/12/1978" class="form-control" data-bind="datepicker: birthdayIso, datepickerOptions: { format: 'DD/MM/YYYY', autoHide: false }" type="text">
+                        </div>
+                        <div class="col-md-2">
+                            <input value="1978-12-02" class="form-control" data-bind="value: birthdayIso" type="text">
+                        </div>
+                    </div>
+                </div>
+                <p>Using KnockOut.js Format binding.</p>
+                <div class="well">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <input value="2/12/78" class="form-control" data-bind="datepicker: birthdayFormat, datepickerOptions: { dataType: 'format', format: 'D/M/YY' }" type="text">
+                        </div>
+                        <div class="col-md-2">
+                            <input value="2/12/78" class="form-control" data-bind="value: birthdayFormat" type="text">
+                        </div>
+                    </div>
+                </div>
+                <p>Using KnockOut.js Start and End date binding.</p>
+                <div class="well">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <input value="2013-12-02" class="form-control" data-bind="datepicker: birthdayThisYearMoment, datepickerOptions: { format: 'YYYY-MM-DD', startDate: '2013-01-01', endDate: '2013-12-31' }" type="text">
+                        </div>
+                        <div class="col-md-4">
+                            <input value="Mon Dec 02 2013 00:00:00 GMT+0100" class="form-control" data-bind="value: birthdayThisYearMoment" type="text">
+                        </div>
+                    </div>
+                </div>
+                <p>Using KnockOut.js Date binding.</p>
+                <div class="well">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <input value="2/12/78" class="form-control" data-bind="datepicker: birthdayDate, datepickerOptions: { format: 'D/M/YY' }" type="text">
+                        </div>
+                        <div class="col-md-4">
+                            <input value="&quot;1978-12-01T23:00:00.000Z&quot;" readonly="readonly" class="form-control" data-bind="value: ko.toJSON(birthdayDate)" type="text">
+                        </div>
+                    </div>
+                </div>
+                <p>Using KnockOut.js Moment binding.</p>
+                <div class="well">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <input value="2/12/78" class="form-control" data-bind="datepicker: birthdayMoment, datepickerOptions: { format: 'D/M/YY' }" type="text">
+                        </div>
+                        <div class="col-md-4">
+                            <input value="&quot;1978-12-01T23:00:00.000Z&quot;" readonly="readonly" class="form-control" data-bind="value: ko.toJSON(birthdayMoment)" type="text">
+                        </div>
+                    </div>
+                </div>
+                <p>Attached to a field with the format specified via data tag.</p>
+                <div class="well">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <input class="form-control" value="11/11/12" data-datepicker-format="DD/MM/YY" data-datepicker-autohide="false" id="dp2" type="text">
+                        </div>
+                    </div>
+                </div>
+                <p>As component.</p>
+                <div class="well">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="input-group date" id="dp3" data-date="20-01-2015" data-datepicker-format="DD-MM-YYYY">
+                                <input class="form-control" size="16" value="20-01-2015" readonly="readonly" type="text">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p>As component expanding to the left.</p>
+                <div class="well">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="input-group date" id="dp6" data-date="20-01-2015" data-datepicker-format="DD-MM-YYYY" data-datepicker-calendarplacement="left">
+                                <input class="form-control" size="16" value="20-01-2015" readonly="readonly" type="text">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p>Start with years viewMode.</p>
+                <div class="well">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="input-group date" id="dpYears" data-date="20-01-2015" data-datepicker-format="DD-MM-YYYY" data-datepicker-viewmode="years">
+                                <input class="form-control" size="16" value="20-01-2015" readonly="readonly" type="text">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p>Limit the view mode to months</p>
+                <div class="well">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="input-group date" id="dpMonths" data-date="102/2015" data-datepicker-format="MM/YYYY" data-datepicker-viewmode="months">
+                                <input class="form-control" size="16" value="10/2015" readonly="readonly" type="text">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p>Attached to other elment then field and using events to work with the date values.</p>
+                <div class="well">
+                    <div class="alert alert-danger" role="alert" id="alert">
+                        <strong></strong>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Start date <a href="#" class="btn btn-default" id="dp4" data-datepicker-format="YYYY-MM-DD" data-date="2015-01-20">Change</a></th>
+                                <th>End date <a href="#" class="btn btn-default" id="dp5" data-datepicker-format="YYYY-MM-DD" data-date="2015-01-25">Change</a></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td id="startDate">2015-01-20</td>
+                                <td id="endDate">2015-01-25</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <hr>
+                <h2>Using moment-datepicker.js</h2>
+                <p>Call the datepicker via javascript:</p>
+                <pre style="" class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><span class="pln">$</span><span class="pun">(</span><span class="str">'.datepicker'</span><span class="pun">).</span><span class="pln">datepicker</span><span class="pun">()</span></li></ol></pre>
+                <p>Don't forget to include the datepicker.css stylesheet.</p>
+                <h3>Options</h3>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 100px;">Name</th>
+                            <th style="width: 50px;">type</th>
+                            <th style="width: 100px;">default</th>
+                            <th>description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>format</td>
+                            <td>string</td>
+                            <td>'MM/DD/YYYY'</td>
+                            <td>the date format, <a href="http://momentjs.com/docs/#/displaying/format/" rel="nofollow">see details...</a></td>
+                        </tr>
+                        <tr>
+                            <td>weekStart</td>
+                            <td>integer</td>
+                            <td>0</td>
+                            <td>day of the week start. 0 for Sunday -  6 for Saturday</td>
+                        </tr>
+                        <tr>
+                            <td>viewMode</td>
+                            <td>string|integer</td>
+                            <td>0 = 'days'</td>
+                            <td>set the start view mode. Accepts: 'days', 'months', 'years', 0 for days, 1 for months and 2 for years</td>
+                        </tr>
+                        <tr>
+                            <td>minViewMode</td>
+                            <td>string|integer</td>
+                            <td>0 = 'days'</td>
+                            <td>set a limit for view mode. Accepts: 'days', 'months', 'years', 0 for days, 1 for months and 2 for years</td>
+                        </tr>
+                        <tr>
+                            <td>autoHide</td>
+                            <td>boolean</td>
+                            <td>true</td>
+                            <td>Close the datepicker when an element is selected</td>
+                        </tr>
+                        <tr>
+                            <td>calendarPlacement</td>
+                            <td>string</td>
+                            <td>'right'|'left'</td>
+                            <td>Decide the dropdown direction for the calendar</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Markup</h3>
+                <p>Format a component.</p>
+                <pre style="" class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><span class="tag">&lt;div</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">"input-group date"</span><span class="pln"> </span><span class="atn">id</span><span class="pun">=</span><span class="atv">"dp3"</span><span class="pln"> </span><span class="atn">data-date</span><span class="pun">=</span><span class="atv">"12-02-2015"</span><span class="pln"> </span><span class="atn">data-datepicker-format</span><span class="pun">=</span><span class="atv">"dd-mm-yyyy"</span><span class="tag">&gt;</span></li><li class="L1"><span class="pln">    </span><span class="tag">&lt;input</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">"form-control"</span><span class="pln"> </span><span class="atn">size</span><span class="pun">=</span><span class="atv">"16"</span><span class="pln"> </span><span class="atn">type</span><span class="pun">=</span><span class="atv">"text"</span><span class="pln"> </span><span class="atn">value</span><span class="pun">=</span><span class="atv">"12-02-2015"</span><span class="tag">&gt;</span></li><li class="L2"><span class="pln">    </span><span class="tag">&lt;span</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">"input-group-addon"</span><span class="tag">&gt;&lt;i</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">"glyphicon glyphicon-calendar"</span><span class="tag">&gt;&lt;/i&gt;&lt;/span&gt;</span></li><li class="L3"><span class="tag">&lt;/div&gt;</span></li></ol></pre>
+                <h3>Methods</h3>
+                <h4>.datepicker(options)</h4>
+                <p>Initializes an datepicker.</p>
+                <h4>.datepicker('show')</h4>
+                <p>Show the datepicker.</p>
+                <h4>.datepicker('hide')</h4>
+                <p>Hide the datepicker.</p>
+                <h4>.datepicker('place')</h4>
+                <p>Updates the date picker's position relative to the element</p>
+                <h4>.datepicker('set', value)</h4>
+                <p>Set a new value for the datepicker. It cand be a string, moment, date, etc.</p>
+                <h4>.datepicker('get')</h4>
+                <p>Returns a clone of current internal moment object</p>
+                <h4>.datepicker('getAsText')</h4>
+                <p>Returns selected date as a formated string</p>
+                <h3>Events</h3>
+                <p>Datepicker class exposes a few events for manipulating the dates.</p>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 150px;">Event</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>show</td>
+                            <td>This event fires immediately when the date picker is displayed.</td>
+                        </tr>
+                        <tr>
+                            <td>hide</td>
+                            <td>This event is fired immediately when the date picker is hidden.</td>
+                        </tr>
+                        <tr>
+                            <td>changeDate</td>
+                            <td>This event is fired when the date is changed.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <pre style="" class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><span class="pln">$</span><span class="pun">(</span><span class="str">'#dp5'</span><span class="pun">).</span><span class="pln">datepicker</span><span class="pun">()</span></li><li class="L1"><span class="pln">    </span><span class="pun">.</span><span class="pln">on</span><span class="pun">(</span><span class="str">'changeDate'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">function</span><span class="pun">(</span><span class="pln">ev</span><span class="pun">){</span></li><li class="L2"><span class="pln">        </span><span class="kwd">if</span><span class="pln"> </span><span class="pun">(</span><span class="pln">ev</span><span class="pun">.</span><span class="pln">date</span><span class="pun">.</span><span class="pln">valueOf</span><span class="pun">()</span><span class="pln"> </span><span class="pun">&lt;</span><span class="pln"> startDate</span><span class="pun">.</span><span class="pln">valueOf</span><span class="pun">()){</span></li><li class="L3"><span class="pln">            </span><span class="pun">....</span></li><li class="L4"><span class="pln">        </span><span class="pun">}</span></li><li class="L5"><span class="pln">    </span><span class="pun">});</span></li></ol></pre>
+                <h3>Using with Bootstrap 2</h3>
+                <p>You can use Moment Datepicker with Bootstrap 2 by including only the <strong>datepicker2.css</strong> stylesheet.</p>
+                <p>Also, the markup for the component will vary a little:</p>
+                <pre style="" class="prettyprint linenums prettyprinted"><ol class="linenums"><li class="L0"><span class="tag">&lt;div</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">"input-append date"</span><span class="pln"> </span><span class="atn">id</span><span class="pun">=</span><span class="atv">"dp3"</span><span class="pln"> </span><span class="atn">data-date</span><span class="pun">=</span><span class="atv">"12-02-2015"</span><span class="pln"> </span><span class="atn">data-datepicker-format</span><span class="pun">=</span><span class="atv">"dd-mm-yyyy"</span><span class="tag">&gt;</span></li><li class="L1"><span class="pln">    </span><span class="tag">&lt;input</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">"col-md-2"</span><span class="pln"> </span><span class="atn">size</span><span class="pun">=</span><span class="atv">"16"</span><span class="pln"> </span><span class="atn">type</span><span class="pun">=</span><span class="atv">"text"</span><span class="pln"> </span><span class="atn">value</span><span class="pun">=</span><span class="atv">"12-02-2015"</span><span class="tag">&gt;</span></li><li class="L2"><span class="pln">    </span><span class="tag">&lt;span</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">"input-group-addon"</span><span class="tag">&gt;&lt;i</span><span class="pln"> </span><span class="atn">class</span><span class="pun">=</span><span class="atv">".glyphicon .glyphicon-th"</span><span class="tag">&gt;&lt;/i&gt;&lt;/span&gt;</span></li><li class="L3"><span class="tag">&lt;/div&gt;</span></li></ol></pre>
+            </section>
+        </div>
+        <footer>
+        </footer>
+
+
+</div><div class="datepicker dropdown-menu"><div style="display: block;" class="datepicker-days"><table class=" table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">December 1978</th><th class="next">›</th></tr><tr><th class="dow">Su</th><th class="dow">Mo</th><th class="dow">Tu</th><th class="dow">We</th><th class="dow">Th</th><th class="dow">Fr</th><th class="dow">Sa</th></tr></thead><tbody><tr><td class="day old">26</td><td class="day old">27</td><td class="day old">28</td><td class="day old">29</td><td class="day old">30</td><td class="day">1</td><td class="day active">2</td></tr><tr><td class="day">3</td><td class="day">4</td><td class="day">5</td><td class="day">6</td><td class="day">7</td><td class="day">8</td><td class="day">9</td></tr><tr><td class="day">10</td><td class="day">11</td><td class="day">12</td><td class="day">13</td><td class="day">14</td><td class="day">15</td><td class="day">16</td></tr><tr><td class="day">17</td><td class="day">18</td><td class="day">19</td><td class="day">20</td><td class="day">21</td><td class="day">22</td><td class="day">23</td></tr><tr><td class="day">24</td><td class="day">25</td><td class="day">26</td><td class="day">27</td><td class="day">28</td><td class="day">29</td><td class="day">30</td></tr><tr><td class="day">31</td><td class="day new">1</td><td class="day new">2</td><td class="day new">3</td><td class="day new">4</td><td class="day new">5</td><td class="day new">6</td></tr></tbody></table></div><div style="display: none;" class="datepicker-months"><table class="table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">1978</th><th class="next">›</th></tr></thead><tbody><tr><td colspan="7"><span class="month">Jan</span><span class="month">Feb</span><span class="month">Mar</span><span class="month">Apr</span><span class="month">May</span><span class="month">Jun</span><span class="month">Jul</span><span class="month">Aug</span><span class="month">Sep</span><span class="month">Oct</span><span class="month">Nov</span><span class="month active">Dec</span></td></tr></tbody></table></div><div style="display: none;" class="datepicker-years"><table class="table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">1970-1979</th><th class="next">›</th></tr></thead><tbody><tr><td colspan="7"><span class="year old">1969</span><span class="year">1970</span><span class="year">1971</span><span class="year">1972</span><span class="year">1973</span><span class="year">1974</span><span class="year">1975</span><span class="year">1976</span><span class="year">1977</span><span class="year active">1978</span><span class="year">1979</span><span class="year old">1980</span></td></tr></tbody></table></div></div><div style="display: none;" class="datepicker dropdown-menu"><div style="display: block;" class="datepicker-days"><table class=" table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">December 1978</th><th class="next">›</th></tr><tr><th class="dow">Su</th><th class="dow">Mo</th><th class="dow">Tu</th><th class="dow">We</th><th class="dow">Th</th><th class="dow">Fr</th><th class="dow">Sa</th></tr></thead><tbody><tr><td class="day old">26</td><td class="day old">27</td><td class="day old">28</td><td class="day old">29</td><td class="day old">30</td><td class="day">1</td><td class="day active">2</td></tr><tr><td class="day">3</td><td class="day">4</td><td class="day">5</td><td class="day">6</td><td class="day">7</td><td class="day">8</td><td class="day">9</td></tr><tr><td class="day">10</td><td class="day">11</td><td class="day">12</td><td class="day">13</td><td class="day">14</td><td class="day">15</td><td class="day">16</td></tr><tr><td class="day">17</td><td class="day">18</td><td class="day">19</td><td class="day">20</td><td class="day">21</td><td class="day">22</td><td class="day">23</td></tr><tr><td class="day">24</td><td class="day">25</td><td class="day">26</td><td class="day">27</td><td class="day">28</td><td class="day">29</td><td class="day">30</td></tr><tr><td class="day">31</td><td class="day new">1</td><td class="day new">2</td><td class="day new">3</td><td class="day new">4</td><td class="day new">5</td><td class="day new">6</td></tr></tbody></table></div><div style="display: none;" class="datepicker-months"><table class="table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">1978</th><th class="next">›</th></tr></thead><tbody><tr><td colspan="7"><span class="month">Jan</span><span class="month">Feb</span><span class="month">Mar</span><span class="month">Apr</span><span class="month">May</span><span class="month">Jun</span><span class="month">Jul</span><span class="month">Aug</span><span class="month">Sep</span><span class="month">Oct</span><span class="month">Nov</span><span class="month active">Dec</span></td></tr></tbody></table></div><div style="display: none;" class="datepicker-years"><table class="table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">1970-1979</th><th class="next">›</th></tr></thead><tbody><tr><td colspan="7"><span class="year old">1969</span><span class="year">1970</span><span class="year">1971</span><span class="year">1972</span><span class="year">1973</span><span class="year">1974</span><span class="year">1975</span><span class="year">1976</span><span class="year">1977</span><span class="year active">1978</span><span class="year">1979</span><span class="year old">1980</span></td></tr></tbody></table></div></div><div style="display: none;" class="datepicker dropdown-menu"><div style="display: block;" class="datepicker-days"><table class=" table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">December 2013</th><th class="next">›</th></tr><tr><th class="dow">Su</th><th class="dow">Mo</th><th class="dow">Tu</th><th class="dow">We</th><th class="dow">Th</th><th class="dow">Fr</th><th class="dow">Sa</th></tr></thead><tbody><tr><td class="day old">24</td><td class="day old">25</td><td class="day old">26</td><td class="day old">27</td><td class="day old">28</td><td class="day old">29</td><td class="day old">30</td></tr><tr><td class="day">1</td><td class="day active">2</td><td class="day">3</td><td class="day">4</td><td class="day">5</td><td class="day">6</td><td class="day">7</td></tr><tr><td class="day">8</td><td class="day">9</td><td class="day">10</td><td class="day">11</td><td class="day">12</td><td class="day">13</td><td class="day">14</td></tr><tr><td class="day">15</td><td class="day">16</td><td class="day">17</td><td class="day">18</td><td class="day">19</td><td class="day">20</td><td class="day">21</td></tr><tr><td class="day">22</td><td class="day">23</td><td class="day">24</td><td class="day">25</td><td class="day">26</td><td class="day">27</td><td class="day">28</td></tr><tr><td class="day">29</td><td class="day">30</td><td class="day">31</td><td class="day new disabled">1</td><td class="day new disabled">2</td><td class="day new disabled">3</td><td class="day new disabled">4</td></tr></tbody></table></div><div style="display: none;" class="datepicker-months"><table class="table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">2013</th><th class="next">›</th></tr></thead><tbody><tr><td colspan="7"><span class="month">Jan</span><span class="month">Feb</span><span class="month">Mar</span><span class="month">Apr</span><span class="month">May</span><span class="month">Jun</span><span class="month">Jul</span><span class="month">Aug</span><span class="month">Sep</span><span class="month">Oct</span><span class="month">Nov</span><span class="month active">Dec</span></td></tr></tbody></table></div><div style="display: none;" class="datepicker-years"><table class="table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">2010-2019</th><th class="next">›</th></tr></thead><tbody><tr><td colspan="7"><span class="year old disabled">2009</span><span class="year disabled">2010</span><span class="year disabled">2011</span><span class="year disabled">2012</span><span class="year active">2013</span><span class="year disabled">2014</span><span class="year disabled">2015</span><span class="year disabled">2016</span><span class="year disabled">2017</span><span class="year disabled">2018</span><span class="year disabled">2019</span><span class="year old disabled">2020</span></td></tr></tbody></table></div></div><div style="display: none;" class="datepicker dropdown-menu"><div style="display: block;" class="datepicker-days"><table class=" table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">December 1978</th><th class="next">›</th></tr><tr><th class="dow">Su</th><th class="dow">Mo</th><th class="dow">Tu</th><th class="dow">We</th><th class="dow">Th</th><th class="dow">Fr</th><th class="dow">Sa</th></tr></thead><tbody><tr><td class="day old">26</td><td class="day old">27</td><td class="day old">28</td><td class="day old">29</td><td class="day old">30</td><td class="day">1</td><td class="day active">2</td></tr><tr><td class="day">3</td><td class="day">4</td><td class="day">5</td><td class="day">6</td><td class="day">7</td><td class="day">8</td><td class="day">9</td></tr><tr><td class="day">10</td><td class="day">11</td><td class="day">12</td><td class="day">13</td><td class="day">14</td><td class="day">15</td><td class="day">16</td></tr><tr><td class="day">17</td><td class="day">18</td><td class="day">19</td><td class="day">20</td><td class="day">21</td><td class="day">22</td><td class="day">23</td></tr><tr><td class="day">24</td><td class="day">25</td><td class="day">26</td><td class="day">27</td><td class="day">28</td><td class="day">29</td><td class="day">30</td></tr><tr><td class="day">31</td><td class="day new">1</td><td class="day new">2</td><td class="day new">3</td><td class="day new">4</td><td class="day new">5</td><td class="day new">6</td></tr></tbody></table></div><div style="display: none;" class="datepicker-months"><table class="table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">1978</th><th class="next">›</th></tr></thead><tbody><tr><td colspan="7"><span class="month">Jan</span><span class="month">Feb</span><span class="month">Mar</span><span class="month">Apr</span><span class="month">May</span><span class="month">Jun</span><span class="month">Jul</span><span class="month">Aug</span><span class="month">Sep</span><span class="month">Oct</span><span class="month">Nov</span><span class="month active">Dec</span></td></tr></tbody></table></div><div style="display: none;" class="datepicker-years"><table class="table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">1970-1979</th><th class="next">›</th></tr></thead><tbody><tr><td colspan="7"><span class="year old">1969</span><span class="year">1970</span><span class="year">1971</span><span class="year">1972</span><span class="year">1973</span><span class="year">1974</span><span class="year">1975</span><span class="year">1976</span><span class="year">1977</span><span class="year active">1978</span><span class="year">1979</span><span class="year old">1980</span></td></tr></tbody></table></div></div><div style="display: none;" class="datepicker dropdown-menu"><div style="display: block;" class="datepicker-days"><table class=" table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">December 1978</th><th class="next">›</th></tr><tr><th class="dow">Su</th><th class="dow">Mo</th><th class="dow">Tu</th><th class="dow">We</th><th class="dow">Th</th><th class="dow">Fr</th><th class="dow">Sa</th></tr></thead><tbody><tr><td class="day old">26</td><td class="day old">27</td><td class="day old">28</td><td class="day old">29</td><td class="day old">30</td><td class="day">1</td><td class="day active">2</td></tr><tr><td class="day">3</td><td class="day">4</td><td class="day">5</td><td class="day">6</td><td class="day">7</td><td class="day">8</td><td class="day">9</td></tr><tr><td class="day">10</td><td class="day">11</td><td class="day">12</td><td class="day">13</td><td class="day">14</td><td class="day">15</td><td class="day">16</td></tr><tr><td class="day">17</td><td class="day">18</td><td class="day">19</td><td class="day">20</td><td class="day">21</td><td class="day">22</td><td class="day">23</td></tr><tr><td class="day">24</td><td class="day">25</td><td class="day">26</td><td class="day">27</td><td class="day">28</td><td class="day">29</td><td class="day">30</td></tr><tr><td class="day">31</td><td class="day new">1</td><td class="day new">2</td><td class="day new">3</td><td class="day new">4</td><td class="day new">5</td><td class="day new">6</td></tr></tbody></table></div><div style="display: none;" class="datepicker-months"><table class="table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">1978</th><th class="next">›</th></tr></thead><tbody><tr><td colspan="7"><span class="month">Jan</span><span class="month">Feb</span><span class="month">Mar</span><span class="month">Apr</span><span class="month">May</span><span class="month">Jun</span><span class="month">Jul</span><span class="month">Aug</span><span class="month">Sep</span><span class="month">Oct</span><span class="month">Nov</span><span class="month active">Dec</span></td></tr></tbody></table></div><div style="display: none;" class="datepicker-years"><table class="table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">1970-1979</th><th class="next">›</th></tr></thead><tbody><tr><td colspan="7"><span class="year old">1969</span><span class="year">1970</span><span class="year">1971</span><span class="year">1972</span><span class="year">1973</span><span class="year">1974</span><span class="year">1975</span><span class="year">1976</span><span class="year">1977</span><span class="year active">1978</span><span class="year">1979</span><span class="year old">1980</span></td></tr></tbody></table></div></div><div class="datepicker dropdown-menu"><div style="display: block;" class="datepicker-days"><table class=" table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">January 2015</th><th class="next">›</th></tr><tr><th class="dow">Su</th><th class="dow">Mo</th><th class="dow">Tu</th><th class="dow">We</th><th class="dow">Th</th><th class="dow">Fr</th><th class="dow">Sa</th></tr></thead><tbody><tr><td class="day old">28</td><td class="day old">29</td><td class="day old">30</td><td class="day old">31</td><td class="day">1</td><td class="day">2</td><td class="day">3</td></tr><tr><td class="day">4</td><td class="day">5</td><td class="day">6</td><td class="day">7</td><td class="day">8</td><td class="day">9</td><td class="day">10</td></tr><tr><td class="day">11</td><td class="day">12</td><td class="day">13</td><td class="day">14</td><td class="day">15</td><td class="day">16</td><td class="day">17</td></tr><tr><td class="day">18</td><td class="day">19</td><td class="day">20</td><td class="day active">21</td><td class="day">22</td><td class="day">23</td><td class="day">24</td></tr><tr><td class="day">25</td><td class="day">26</td><td class="day">27</td><td class="day">28</td><td class="day">29</td><td class="day">30</td><td class="day">31</td></tr><tr><td class="day new">1</td><td class="day new">2</td><td class="day new">3</td><td class="day new">4</td><td class="day new">5</td><td class="day new">6</td><td class="day new">7</td></tr></tbody></table></div><div style="display: none;" class="datepicker-months"><table class="table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">2015</th><th class="next">›</th></tr></thead><tbody><tr><td colspan="7"><span class="month active">Jan</span><span class="month">Feb</span><span class="month">Mar</span><span class="month">Apr</span><span class="month">May</span><span class="month">Jun</span><span class="month">Jul</span><span class="month">Aug</span><span class="month">Sep</span><span class="month">Oct</span><span class="month">Nov</span><span class="month">Dec</span></td></tr></tbody></table></div><div style="display: none;" class="datepicker-years"><table class="table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">2010-2019</th><th class="next">›</th></tr></thead><tbody><tr><td colspan="7"><span class="year old">2009</span><span class="year">2010</span><span class="year">2011</span><span class="year">2012</span><span class="year">2013</span><span class="year">2014</span><span class="year active">2015</span><span class="year">2016</span><span class="year">2017</span><span class="year">2018</span><span class="year">2019</span><span class="year old">2020</span></td></tr></tbody></table></div></div><div class="datepicker dropdown-menu"><div style="display: block;" class="datepicker-days"><table class=" table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">November 2012</th><th class="next">›</th></tr><tr><th class="dow">Su</th><th class="dow">Mo</th><th class="dow">Tu</th><th class="dow">We</th><th class="dow">Th</th><th class="dow">Fr</th><th class="dow">Sa</th></tr></thead><tbody><tr><td class="day old">28</td><td class="day old">29</td><td class="day old">30</td><td class="day old">31</td><td class="day">1</td><td class="day">2</td><td class="day">3</td></tr><tr><td class="day">4</td><td class="day">5</td><td class="day">6</td><td class="day">7</td><td class="day">8</td><td class="day">9</td><td class="day">10</td></tr><tr><td class="day active">11</td><td class="day">12</td><td class="day">13</td><td class="day">14</td><td class="day">15</td><td class="day">16</td><td class="day">17</td></tr><tr><td class="day">18</td><td class="day">19</td><td class="day">20</td><td class="day">21</td><td class="day">22</td><td class="day">23</td><td class="day">24</td></tr><tr><td class="day">25</td><td class="day">26</td><td class="day">27</td><td class="day">28</td><td class="day">29</td><td class="day">30</td><td class="day new">1</td></tr><tr><td class="day new">2</td><td class="day new">3</td><td class="day new">4</td><td class="day new">5</td><td class="day new">6</td><td class="day new">7</td><td class="day new">8</td></tr></tbody></table></div><div style="display: none;" class="datepicker-months"><table class="table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">2012</th><th class="next">›</th></tr></thead><tbody><tr><td colspan="7"><span class="month">Jan</span><span class="month">Feb</span><span class="month">Mar</span><span class="month">Apr</span><span class="month">May</span><span class="month">Jun</span><span class="month">Jul</span><span class="month">Aug</span><span class="month">Sep</span><span class="month">Oct</span><span class="month active">Nov</span><span class="month">Dec</span></td></tr></tbody></table></div><div style="display: none;" class="datepicker-years"><table class="table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">2010-2019</th><th class="next">›</th></tr></thead><tbody><tr><td colspan="7"><span class="year old">2009</span><span class="year">2010</span><span class="year">2011</span><span class="year active">2012</span><span class="year">2013</span><span class="year">2014</span><span class="year">2015</span><span class="year">2016</span><span class="year">2017</span><span class="year">2018</span><span class="year">2019</span><span class="year old">2020</span></td></tr></tbody></table></div></div><div style="display: none;" class="datepicker dropdown-menu"><div style="display: block;" class="datepicker-days"><table class=" table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">January 2015</th><th class="next">›</th></tr><tr><th class="dow">Su</th><th class="dow">Mo</th><th class="dow">Tu</th><th class="dow">We</th><th class="dow">Th</th><th class="dow">Fr</th><th class="dow">Sa</th></tr></thead><tbody><tr><td class="day old">28</td><td class="day old">29</td><td class="day old">30</td><td class="day old">31</td><td class="day">1</td><td class="day">2</td><td class="day">3</td></tr><tr><td class="day">4</td><td class="day">5</td><td class="day">6</td><td class="day">7</td><td class="day">8</td><td class="day">9</td><td class="day">10</td></tr><tr><td class="day">11</td><td class="day">12</td><td class="day">13</td><td class="day">14</td><td class="day">15</td><td class="day">16</td><td class="day">17</td></tr><tr><td class="day">18</td><td class="day">19</td><td class="day active">20</td><td class="day">21</td><td class="day">22</td><td class="day">23</td><td class="day">24</td></tr><tr><td class="day">25</td><td class="day">26</td><td class="day">27</td><td class="day">28</td><td class="day">29</td><td class="day">30</td><td class="day">31</td></tr><tr><td class="day new">1</td><td class="day new">2</td><td class="day new">3</td><td class="day new">4</td><td class="day new">5</td><td class="day new">6</td><td class="day new">7</td></tr></tbody></table></div><div style="display: none;" class="datepicker-months"><table class="table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">2015</th><th class="next">›</th></tr></thead><tbody><tr><td colspan="7"><span class="month active">Jan</span><span class="month">Feb</span><span class="month">Mar</span><span class="month">Apr</span><span class="month">May</span><span class="month">Jun</span><span class="month">Jul</span><span class="month">Aug</span><span class="month">Sep</span><span class="month">Oct</span><span class="month">Nov</span><span class="month">Dec</span></td></tr></tbody></table></div><div style="display: none;" class="datepicker-years"><table class="table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">2010-2019</th><th class="next">›</th></tr></thead><tbody><tr><td colspan="7"><span class="year old">2009</span><span class="year">2010</span><span class="year">2011</span><span class="year">2012</span><span class="year">2013</span><span class="year">2014</span><span class="year active">2015</span><span class="year">2016</span><span class="year">2017</span><span class="year">2018</span><span class="year">2019</span><span class="year old">2020</span></td></tr></tbody></table></div></div><div style="display: none;" class="datepicker dropdown-menu datepicker-left"><div style="display: block;" class="datepicker-days"><table class=" table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">January 2015</th><th class="next">›</th></tr><tr><th class="dow">Su</th><th class="dow">Mo</th><th class="dow">Tu</th><th class="dow">We</th><th class="dow">Th</th><th class="dow">Fr</th><th class="dow">Sa</th></tr></thead><tbody><tr><td class="day old">28</td><td class="day old">29</td><td class="day old">30</td><td class="day old">31</td><td class="day">1</td><td class="day">2</td><td class="day">3</td></tr><tr><td class="day">4</td><td class="day">5</td><td class="day">6</td><td class="day">7</td><td class="day">8</td><td class="day">9</td><td class="day">10</td></tr><tr><td class="day">11</td><td class="day">12</td><td class="day">13</td><td class="day">14</td><td class="day">15</td><td class="day">16</td><td class="day">17</td></tr><tr><td class="day">18</td><td class="day">19</td><td class="day active">20</td><td class="day">21</td><td class="day">22</td><td class="day">23</td><td class="day">24</td></tr><tr><td class="day">25</td><td class="day">26</td><td class="day">27</td><td class="day">28</td><td class="day">29</td><td class="day">30</td><td class="day">31</td></tr><tr><td class="day new">1</td><td class="day new">2</td><td class="day new">3</td><td class="day new">4</td><td class="day new">5</td><td class="day new">6</td><td class="day new">7</td></tr></tbody></table></div><div style="display: none;" class="datepicker-months"><table class="table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">2015</th><th class="next">›</th></tr></thead><tbody><tr><td colspan="7"><span class="month active">Jan</span><span class="month">Feb</span><span class="month">Mar</span><span class="month">Apr</span><span class="month">May</span><span class="month">Jun</span><span class="month">Jul</span><span class="month">Aug</span><span class="month">Sep</span><span class="month">Oct</span><span class="month">Nov</span><span class="month">Dec</span></td></tr></tbody></table></div><div style="display: none;" class="datepicker-years"><table class="table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">2010-2019</th><th class="next">›</th></tr></thead><tbody><tr><td colspan="7"><span class="year old">2009</span><span class="year">2010</span><span class="year">2011</span><span class="year">2012</span><span class="year">2013</span><span class="year">2014</span><span class="year active">2015</span><span class="year">2016</span><span class="year">2017</span><span class="year">2018</span><span class="year">2019</span><span class="year old">2020</span></td></tr></tbody></table></div></div><div style="display: none;" class="datepicker dropdown-menu"><div style="display: none;" class="datepicker-days"><table class=" table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">January 2015</th><th class="next">›</th></tr><tr><th class="dow">Su</th><th class="dow">Mo</th><th class="dow">Tu</th><th class="dow">We</th><th class="dow">Th</th><th class="dow">Fr</th><th class="dow">Sa</th></tr></thead><tbody><tr><td class="day old">28</td><td class="day old">29</td><td class="day old">30</td><td class="day old">31</td><td class="day">1</td><td class="day">2</td><td class="day">3</td></tr><tr><td class="day">4</td><td class="day">5</td><td class="day">6</td><td class="day">7</td><td class="day">8</td><td class="day">9</td><td class="day">10</td></tr><tr><td class="day">11</td><td class="day">12</td><td class="day">13</td><td class="day">14</td><td class="day">15</td><td class="day">16</td><td class="day">17</td></tr><tr><td class="day">18</td><td class="day">19</td><td class="day active">20</td><td class="day">21</td><td class="day">22</td><td class="day">23</td><td class="day">24</td></tr><tr><td class="day">25</td><td class="day">26</td><td class="day">27</td><td class="day">28</td><td class="day">29</td><td class="day">30</td><td class="day">31</td></tr><tr><td class="day new">1</td><td class="day new">2</td><td class="day new">3</td><td class="day new">4</td><td class="day new">5</td><td class="day new">6</td><td class="day new">7</td></tr></tbody></table></div><div style="display: none;" class="datepicker-months"><table class="table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">2015</th><th class="next">›</th></tr></thead><tbody><tr><td colspan="7"><span class="month active">Jan</span><span class="month">Feb</span><span class="month">Mar</span><span class="month">Apr</span><span class="month">May</span><span class="month">Jun</span><span class="month">Jul</span><span class="month">Aug</span><span class="month">Sep</span><span class="month">Oct</span><span class="month">Nov</span><span class="month">Dec</span></td></tr></tbody></table></div><div style="display: block;" class="datepicker-years"><table class="table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">2010-2019</th><th class="next">›</th></tr></thead><tbody><tr><td colspan="7"><span class="year old">2009</span><span class="year">2010</span><span class="year">2011</span><span class="year">2012</span><span class="year">2013</span><span class="year">2014</span><span class="year active">2015</span><span class="year">2016</span><span class="year">2017</span><span class="year">2018</span><span class="year">2019</span><span class="year old">2020</span></td></tr></tbody></table></div></div><div style="display: none;" class="datepicker dropdown-menu"><div style="display: none;" class="datepicker-days"><table class=" table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">October 2015</th><th class="next">›</th></tr><tr><th class="dow">Su</th><th class="dow">Mo</th><th class="dow">Tu</th><th class="dow">We</th><th class="dow">Th</th><th class="dow">Fr</th><th class="dow">Sa</th></tr></thead><tbody><tr><td class="day old">27</td><td class="day old">28</td><td class="day old">29</td><td class="day old">30</td><td class="day active">1</td><td class="day">2</td><td class="day">3</td></tr><tr><td class="day">4</td><td class="day">5</td><td class="day">6</td><td class="day">7</td><td class="day">8</td><td class="day">9</td><td class="day">10</td></tr><tr><td class="day">11</td><td class="day">12</td><td class="day">13</td><td class="day">14</td><td class="day">15</td><td class="day">16</td><td class="day">17</td></tr><tr><td class="day">18</td><td class="day">19</td><td class="day">20</td><td class="day">21</td><td class="day">22</td><td class="day">23</td><td class="day">24</td></tr><tr><td class="day">25</td><td class="day">26</td><td class="day">27</td><td class="day">28</td><td class="day">29</td><td class="day">30</td><td class="day">31</td></tr><tr><td class="day new">1</td><td class="day new">2</td><td class="day new">3</td><td class="day new">4</td><td class="day new">5</td><td class="day new">6</td><td class="day new">7</td></tr></tbody></table></div><div style="display: block;" class="datepicker-months"><table class="table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">2015</th><th class="next">›</th></tr></thead><tbody><tr><td colspan="7"><span class="month">Jan</span><span class="month">Feb</span><span class="month">Mar</span><span class="month">Apr</span><span class="month">May</span><span class="month">Jun</span><span class="month">Jul</span><span class="month">Aug</span><span class="month">Sep</span><span class="month active">Oct</span><span class="month">Nov</span><span class="month">Dec</span></td></tr></tbody></table></div><div style="display: none;" class="datepicker-years"><table class="table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">2010-2019</th><th class="next">›</th></tr></thead><tbody><tr><td colspan="7"><span class="year old">2009</span><span class="year">2010</span><span class="year">2011</span><span class="year">2012</span><span class="year">2013</span><span class="year">2014</span><span class="year active">2015</span><span class="year">2016</span><span class="year">2017</span><span class="year">2018</span><span class="year">2019</span><span class="year old">2020</span></td></tr></tbody></table></div></div><div style="display: none;" class="datepicker dropdown-menu"><div style="display: block;" class="datepicker-days"><table class=" table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">January 2015</th><th class="next">›</th></tr><tr><th class="dow">Su</th><th class="dow">Mo</th><th class="dow">Tu</th><th class="dow">We</th><th class="dow">Th</th><th class="dow">Fr</th><th class="dow">Sa</th></tr></thead><tbody><tr><td class="day old">28</td><td class="day old">29</td><td class="day old">30</td><td class="day old">31</td><td class="day">1</td><td class="day">2</td><td class="day">3</td></tr><tr><td class="day">4</td><td class="day">5</td><td class="day">6</td><td class="day">7</td><td class="day">8</td><td class="day">9</td><td class="day">10</td></tr><tr><td class="day">11</td><td class="day">12</td><td class="day">13</td><td class="day">14</td><td class="day">15</td><td class="day">16</td><td class="day">17</td></tr><tr><td class="day">18</td><td class="day">19</td><td class="day active">20</td><td class="day">21</td><td class="day">22</td><td class="day">23</td><td class="day">24</td></tr><tr><td class="day">25</td><td class="day">26</td><td class="day">27</td><td class="day">28</td><td class="day">29</td><td class="day">30</td><td class="day">31</td></tr><tr><td class="day new">1</td><td class="day new">2</td><td class="day new">3</td><td class="day new">4</td><td class="day new">5</td><td class="day new">6</td><td class="day new">7</td></tr></tbody></table></div><div style="display: none;" class="datepicker-months"><table class="table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">2015</th><th class="next">›</th></tr></thead><tbody><tr><td colspan="7"><span class="month active">Jan</span><span class="month">Feb</span><span class="month">Mar</span><span class="month">Apr</span><span class="month">May</span><span class="month">Jun</span><span class="month">Jul</span><span class="month">Aug</span><span class="month">Sep</span><span class="month">Oct</span><span class="month">Nov</span><span class="month">Dec</span></td></tr></tbody></table></div><div style="display: none;" class="datepicker-years"><table class="table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">2010-2019</th><th class="next">›</th></tr></thead><tbody><tr><td colspan="7"><span class="year old">2009</span><span class="year">2010</span><span class="year">2011</span><span class="year">2012</span><span class="year">2013</span><span class="year">2014</span><span class="year active">2015</span><span class="year">2016</span><span class="year">2017</span><span class="year">2018</span><span class="year">2019</span><span class="year old">2020</span></td></tr></tbody></table></div></div><div style="display: none;" class="datepicker dropdown-menu"><div style="display: block;" class="datepicker-days"><table class=" table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">January 2015</th><th class="next">›</th></tr><tr><th class="dow">Su</th><th class="dow">Mo</th><th class="dow">Tu</th><th class="dow">We</th><th class="dow">Th</th><th class="dow">Fr</th><th class="dow">Sa</th></tr></thead><tbody><tr><td class="day old">28</td><td class="day old">29</td><td class="day old">30</td><td class="day old">31</td><td class="day">1</td><td class="day">2</td><td class="day">3</td></tr><tr><td class="day">4</td><td class="day">5</td><td class="day">6</td><td class="day">7</td><td class="day">8</td><td class="day">9</td><td class="day">10</td></tr><tr><td class="day">11</td><td class="day">12</td><td class="day">13</td><td class="day">14</td><td class="day">15</td><td class="day">16</td><td class="day">17</td></tr><tr><td class="day">18</td><td class="day">19</td><td class="day">20</td><td class="day">21</td><td class="day">22</td><td class="day">23</td><td class="day">24</td></tr><tr><td class="day active">25</td><td class="day">26</td><td class="day">27</td><td class="day">28</td><td class="day">29</td><td class="day">30</td><td class="day">31</td></tr><tr><td class="day new">1</td><td class="day new">2</td><td class="day new">3</td><td class="day new">4</td><td class="day new">5</td><td class="day new">6</td><td class="day new">7</td></tr></tbody></table></div><div style="display: none;" class="datepicker-months"><table class="table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">2015</th><th class="next">›</th></tr></thead><tbody><tr><td colspan="7"><span class="month active">Jan</span><span class="month">Feb</span><span class="month">Mar</span><span class="month">Apr</span><span class="month">May</span><span class="month">Jun</span><span class="month">Jul</span><span class="month">Aug</span><span class="month">Sep</span><span class="month">Oct</span><span class="month">Nov</span><span class="month">Dec</span></td></tr></tbody></table></div><div style="display: none;" class="datepicker-years"><table class="table-condensed"><thead><tr><th class="prev">‹</th><th colspan="5" class="switch">2010-2019</th><th class="next">›</th></tr></thead><tbody><tr><td colspan="7"><span class="year old">2009</span><span class="year">2010</span><span class="year">2011</span><span class="year">2012</span><span class="year">2013</span><span class="year">2014</span><span class="year active">2015</span><span class="year">2016</span><span class="year">2017</span><span class="year">2018</span><span class="year">2019</span><span class="year old">2020</span></td></tr></tbody></table></div></div><div style="left: 0px ! important; top: 3766.1px ! important;" class="firebugResetStyles firebugBlockBackgroundColor firebugLayoutBox firebugLayoutBoxOffset"><div style="padding: 0px ! important; background-color: rgb(237, 255, 100) ! important;" class="firebugResetStyles firebugLayoutBox"><div style="padding: 0px ! important; background-color: rgb(68, 68, 68) ! important;" class="firebugResetStyles firebugLayoutBox"><div style="padding: 0px ! important; background-color: SlateBlue ! important;" class="firebugResetStyles firebugLayoutBox"><div style="width: 1381px ! important; height: 0px ! important; background-color: SkyBlue ! important;" class="firebugResetStyles firebugLayoutBox"></div></div></div></div></div></body></html>

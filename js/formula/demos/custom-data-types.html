@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>formula demo!</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="../formula.js"></script>
+<script src="../library/datatypes/ComplexNumber.js"></script>
+<script src="../library/referencetypes/InputById.js"></script>
+<script>
+
+
+
+jQuery(function() {
+
+  var formula1 = new Formula('ADD_TWO_COMPLEX_NUMBERS(COMPLEXNUMBER(10,10),COMPLEXNUMBER(1,16))');
+  var complexNumber = formula1.calc();
+  alert(complexNumber.toString());
+
+  var simpleFormula1 = new Formula('FORMAT_COMPLEX_NUMBER(ADD_TWO_COMPLEX_NUMBERS(COMPLEXNUMBER(10,10),COMPLEXNUMBER(1,16)))');
+  $('#result').val(simpleFormula1.calc());
+});
+
+</script>
+<style>
+  body {max-width: 800px; padding:2% 5%}
+  label {margin-right: 10px}
+  input[readonly] {background-color: #eee}
+</style>
+</head>
+<body>
+  <h3>Example of working with custom types. Look in source code...</h3>
+
+  <label for="result">Result:</label><input id="result" readonly></input><br>
+
+
+</body>
+</html>

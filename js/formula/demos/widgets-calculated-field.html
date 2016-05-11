@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>jQuery UI Widget - Default functionality</title>
+
+  <!-- All widgets require jquery AND jquery UI -->
+  <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+  <script src="../formula.js"></script>
+  <script src="../library/referencetypes/Element.js"></script>
+
+  <!-- The widget that we are demonstrating here -->
+  <script src="../library/widgets/calculatedfield.js"></script>
+
+  <script>
+
+
+  /**
+   *  Get the unformatted value of calculated field
+   *  Ie if you have <input id="bananas" value="3">, you can reference the value like this: #banana, Ie CONCAT("You have eaten ", #bananas, " bananas")
+   */
+/*
+  Formula.addParser(function(text) {
+    if (text[0] != '#') {
+      return
+    }
+    var elm = document.getElementById(text.substr(1));
+    if (elm) {
+      // Return a "Bound variable". (an object with a getValue() function, and a setChangeCallback() function
+      return {
+        getValue: function () {
+          return elm.value;
+        },
+        setChangeCallback: function(changeCallback) {
+          // This is where jQuery is needed.
+          // TODO: do not depend on jQuery
+          $(elm).bind("change", changeCallback);
+        }
+      }
+    }
+  });
+*/
+
+  Formula.addFunction('SUM', function() {
+    var result=0;
+    for (var i=0; i<arguments.length; i++) {
+      result += parseFloat(arguments[i]);
+    }
+    return result;
+  });
+
+
+  $(function() { 
+
+    $( "#initex1" ).calculatedfield( {
+      formula: 'SUM(1,2)'
+    });
+
+    $( "#initex2" ).calculatedfield();
+
+    $( "#formatex1" ).calculatedfield( {
+      formula: '17',
+      formatter: function( text ) {
+        return '$' + text;
+      }
+    });
+
+    // Changing the formula after initialization
+    function applyFormula(newFormula) {
+      $( "#formula_applied" ).calculatedfield( "option", {
+        formula: newFormula
+      });      
+    }
+    $( "#formula_applied" ).calculatedfield({formula: $( "#the_formula" ).val()});    
+    $( "#the_formula" ).on( "change", function() {
+      applyFormula($(this).val());
+      alert('applied formula:' + $(this).val());
+    });
+
+    // Getting an option
+//    alert($( "#formatex1" ).calculatedfield('option', 'formula'));
+
+    // Getting the unformatted value
+    // alert($( "#formatex1" ).calculatedfield('getCalculatedValue'));
+
+    Formula.addFunction('CALCULATED_VALUE', function(elm) {
+      return $( elm ).calculatedfield('getCalculatedValue')
+    });
+    $( "#refex1" ).calculatedfield();
+
+/*  Event handling:
+
+    $( "[data-formula]" ).on('calculatedfieldcreate', function() {
+      alert('CREAO');
+    });
+    $( "[data-formula]" ).on('calculatedfieldchange', function() {
+      alert('Value changed on a calculated field');
+    });
+*/
+    
+  });
+
+
+  </script>
+<style>
+  body {max-width: 1200px; padding:2% 5%}
+  input {width: 200px; margin-right: 10px;}
+  pre {font-family:monospace; padding: 10px; border: 1px solid #666; background-color: #eee}
+  input[readonly] {background-color: #eee}
+  td {vertical-align: top}
+  td pre {margin-top: 0px}
+</style>
+
+</head>
+<body>
+<h3>Widget: CalculatedField</h3>
+<p>
+The calculated field widget is a jQuery UI widget, which encapsulates formula functionality. It allows you to set a formatter and to change the formula of a field dynamically.
+</p>
+
+<h3>Initializing</h3>
+<p>You initialize the widget by calling the "calculatedfield" method on a jQuery object <i>that points to INPUT elements</i>. This will turn the input elements into calculated fields. You can set the initial formula in the initializer like this:</p>
+
+<table>
+<tr>
+  <th>Script</th>
+  <th>HTML</th>
+  <th>Demo</th>
+</tr>
+<tr>
+  <td>
+<pre>
+$( "#initex1" ).calculatedfield( {
+  formula: new Formula('SUM(1,2)')
+});
+</pre>
+  </td>
+  <td><pre>&lt;input id="initex1">&lt;/input></pre></td>
+  <td><input id="initex1"></input></td>
+</tr>
+</table>
+
+<p>Or you can set it in a "data-formula" attribute of the input:</p>
+<table>
+<tr>
+  <th>Script</th>
+  <th>HTML</th>
+  <th>Demo</th>
+</tr>
+<tr>
+  <td><pre>$( "#initex2" ).calculatedfield();</pre></td>
+  <td><pre>&lt;input id="initex2" data-formula="SUM(1,4)">&lt;/input></pre></td>
+  <td><input id="initex2" data-formula="SUM(1,4)"></input></td>
+</tr>
+</table>
+
+
+<h3>Custom formatter</h3>
+<p>You can set a formatter with the 'formatter' option.
+<table>
+<tr>
+  <th>Script</th>
+  <th>HTML</th>
+  <th>Demo</th>
+</tr>
+<tr>
+  <td>
+<pre>
+$( "#formatex1" ).calculatedfield( {
+  formula: '17',
+  formatter: function( text ) {
+    return '$' + text;
+  }
+});
+</pre>
+</td>
+  <td><pre>&lt;input id="#formatex1">&lt;/input></pre></td>
+  <td><input id="formatex1"></input></td>
+</tr>
+</table>
+
+
+<h3>Changing dynamically</h3>
+<p>Formula and format can be changed dynamically.</p>
+<p>Example of changing the formula after initialization:</p>
+
+<table>
+<tr>
+  <th>Script</th>
+  <th>HTML</th>
+  <th>Demo</th>
+</tr>
+<tr>
+  <td>
+<pre>
+// Change the formula after initialization
+function applyFormula(newFormula) {
+  $( "#formula_applied" ).calculatedfield( "option", {
+    formula: newFormula
+  });      
+}
+
+// Add change handler
+$( "#the_formula" ).on( "change", function() {
+  applyFormula($(this).val());
+});
+
+// Initialize formula
+$( "#formula_applied" ).calculatedfield({
+  formula: $( "#the_formula" ).val()
+});    
+</pre>
+</td>
+<td>
+<pre>
+Formula: 
+&lt;input id="the_formula" value="SUM(1,17)">&lt;/input>&lt;br>
+Result: 
+&lt;input id="formula_applied">&lt;/input>
+</pre>
+</td>
+  <td>
+    Formula: <input id="the_formula" value="SUM(1,17)"></input><br>
+    Result: <input id="formula_applied"></input>
+  </td>
+</tr>
+</table>
+
+<h3>Getting the unformatted value of a calculated field</h3>
+You can get the calculated value of a formula by calling the <i>getCalculatedValue</i> method of the widget
+<pre>
+var unformatted = $( "#formatex1" ).calculatedfield('getCalculatedValue');
+</pre>
+
+<p>If you want a formula to reference the unformatted value of another calculated field, you can for example add a function "CALCULATED_VALUE":</p>
+
+<table>
+<tr>
+  <th>Script</th>
+  <th>HTML</th>
+  <th>Demo</th>
+</tr>
+<tr>
+  <td>
+<pre>
+Formula.addFunction('CALCULATED_VALUE', function(elm) {
+  return $( elm ).calculatedfield('getCalculatedValue')
+});
+$( "#refex1" ).calculatedfield();
+</pre>
+  </td>
+  <td><pre>&lt;input id="refex1" data-formula="CALCULATED_VALUE(#formatex1.element)">&lt;/input></pre></td>
+  <td><input id="refex1" data-formula="CALCULATED_VALUE(#formatex1.element)"></td>
+</tr>
+</table>
+
+
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Reference type: Element (demo)</title>
+
+<script src="../formula.js"></script>
+
+<!-- The "element" reference type requires jquery (or picoquery) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="../library/referencetypes/Element.js"></script>
+
+<!-- For convenience add an initializer, allowing us to specify formulas in the data-formula attribute of input fields -->
+<script src="../library/initializers/data-formula-attr.js"></script>
+<script src="../library/initializers/data-formula-attr-show-formula-on-hover.js"></script>
+<script>
+
+// Add some functions
+// ------------------
+
+Formula.addFunction('SUM', function() {
+  var result=0; i=arguments.length;
+  while (i>0) {
+    i--;
+    result+=parseFloat(arguments[i]);
+  }
+  return result;
+});
+
+Formula.addFunction('IF', function(test, then, otherwise) {
+  return (test ? then : otherwise);
+});
+
+
+
+
+</script>
+<style>
+  body {max-width: 1200px; padding:2% 5%}
+  label {margin-right: 10px; min-width: 190px; display: inline-block;}
+  pre {font-family:monospace; padding: 10px; border: 1px solid #666; background-color: #eee}
+  i {font-size: 0.9em}
+  table {border-collapse: collapse}
+  table td {border: 1px solid black; padding: 5px 10px;}
+  table td[colspan] {border: 0px solid gold; padding: 20px 0 10px 0}
+  #multipleelements input {width: 50px; text-align:right}
+  input[readonly] {background-color: #eee}
+</style>
+</head>
+<body>
+<p>With the "Element" reference type, you can reference various properties of dom elements. It can be used to get values from form elements such as input, select, radiobutton, checkbox and textarea. 
+<h3>Locating the element</h3>
+<p>The element reference consists of two parts. The first part is a reference to the element. It can be referenced by id or by name (the name attribute)</p>
+
+<table>
+  <tr>
+    <td>by id</td>
+    <td>#textinputid</td>
+    <td><input type="text" id="textinputid" value="some text"></input></td>
+    <td><input data-formula="#textinputid" readonly></input></td>
+  </tr>
+  <tr>
+    <td>by name</td>
+    <td>@textinput2</td>
+    <td><input type="text" name="textinput2" value="some text"></input></td>
+    <td><input data-formula="@textinput2" readonly></input></td>
+  </tr>
+</table>
+
+<h3>Getting various properties</h3>
+<p>The second part is optional. If not specified (as in above), it defaults to getting the "value" property of the elment. But you can also reference an attribute, the element itself, and any property of the element</p>
+
+<table>
+  <tr>
+    <td>value</td>
+    <td>#textinputid3.value</td>
+    <td><input type="text" id="textinputid3" value="some text"></input></td>
+    <td><input data-formula="#textinputid3.value" readonly></input></td>
+  </tr>
+  <tr>
+    <td>get an attribute (in this case the "type" attribute)</td>
+    <td>#textinputid4.attr:type</td>
+    <td><input type="text" id="textinputid4" value="some text"></input></td>
+    <td><input data-formula="#textinputid4.attr:type" readonly></input></td>
+  </tr>
+  <tr>
+    <td>get the element itself</td>
+    <td>#textinputid5.element</td>
+    <td><input type="text" id="textinputid5" value="some text"></input></td>
+    <td><input data-formula="#textinputid5.element" readonly></input></td>
+  </tr>
+  <tr>
+    <td>get a property of the element (in this case "tagName")</td>
+    <td>#textinputid6.tagName</td>
+    <td><input type="text" id="textinputid6" value="some text"></input></td>
+    <td><input data-formula="#textinputid6.tagName" readonly></input></td>
+  </tr>
+</table>
+
+
+<h3>Examples with various input types</h3>
+<table>
+  <tr>
+    <td>text input</td>
+    <td>#textinputid8</td>
+    <td><input type="text" id="textinputid8" value="some text"></input></td>
+    <td><input data-formula="#textinputid8" readonly></input></td>
+  </tr>
+  <tr>
+    <td>dropdown select</td>
+    <td>#fav_fruit</td>
+    <td><select id="fav_fruit"><option value="apples">Apples</option><option value="oranges">Oranges</option></select></td>
+    <td><input data-formula="#fav_fruit" readonly></input></td>
+  </tr>
+  <tr>
+    <td>checkbox</td>
+    <td>#newsletter.checked</td>
+    <td><input type="checkbox" id="newsletter"></input></td>
+    <td><input data-formula="#newsletter.checked" readonly></input></td>
+  </tr>
+  <tr>
+    <td>radiobutton</td>
+    <td>#radiobtn.checked</td>
+    <td><input type="radio" id="radiobtn"></input></td>
+    <td><input data-formula="#radiobtn.checked" readonly></input></td>
+  </tr>
+  <tr>
+    <td>radiobutton</td>
+    <td>IF(#radiobtn2.checked,"stuck", "not pressed")</td>
+    <td><input type="radio" id="radiobtn2"></input></td>
+    <td><input data-formula='IF(#radiobtn2.checked,"stuck", "not pressed")' readonly></input></td>
+  </tr>
+  <tr>
+    <td colspan=4>Radiobutton groups are not supported. But you can get around it with some nested IF's:</td>
+  <tr>
+  <tr>
+    <td>radiobuttons</td>
+    <td>IF(#male_id.checked,"male",IF(#female_id.checked,"female",IF(#other_id.checked, "other", "")))</td>
+    <td><input type="radio" name="gender" value="male" id="male_id">Male</input><br><input type="radio" name="gender" value="female" id="female_id">Female</input><br><input type="radio" name="gender" value="other" id="other_id">Other</input></td>
+    <td><input data-formula='IF(#male_id.checked,"male",IF(#female_id.checked,"female",IF(#other_id.checked, "other", "")))' readonly></input></td>
+  </tr>
+</table>
+
+</body>
+</html>

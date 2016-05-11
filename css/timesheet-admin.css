@@ -1,0 +1,37 @@
+
+#edit-description {cursor: pointer; padding-left: 15px; font-weight: bold; color: green}
+
+/* Dialog: Create timesheet */
+#dialog_create_timesheet {}
+#dialog_create_timesheet label {display: block; margin-top: 10px}
+#dialog_create_timesheet input {
+  padding-left: 5px;
+  width: 540px;
+}
+#dialog_create_timesheet select {
+  display: block;
+  margin-bottom: 10px;
+  min-width: 552px;
+}
+#dialog_create_timesheet textarea {
+  display: block;
+  min-width: 542px;
+  min-height: 200px;
+}
+
+/* Dialog: Edit description */
+#dialog_edit_description textarea {
+  display: block;
+  min-width: 542px;
+  min-height: 200px;
+}
+
+
+/* Dialog: Create customer */
+#dialog_create_customer {}
+#dialog_create_customer label {display: block; margin-top: 10px}
+#dialog_create_customer input {
+  padding-left: 5px;
+  width: 340px;
+}
+

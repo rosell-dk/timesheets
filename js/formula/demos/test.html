@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>formula demo</title>
+<script src="../formula.js"></script>
+
+<!-- The initializer and the demo requires jQuery (or picoquery)-->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+<!-- For convenience add an initializer, allowing us to specify formulas in the data-formula attribute of input fields -->
+<script src="../library/initializers/data-formula-attr.js"></script>
+<script src="../library/initializers/data-formula-attr-show-formula-on-hover.js"></script>
+
+
+<script>
+Formula.addFunction('$', function(a, b) {
+  return $(a,b);
+});
+
+Formula.addFunction('$VAL', function($jq) {
+  return $jq.val();
+});
+
+Formula.addFunction('$GET_ATTR', function($jq, attrName) {
+  return $jq.attr(attrName);
+});
+
+jQuery(function() {
+
+
+});
+
+</script>
+<style>
+  body {max-width: 1200px; padding:2% 5%}
+  label {margin-right: 10px; min-width: 150px; display: inline-block;}
+  pre {font-family:monospace; padding: 10px; border: 1px solid #666; background-color: #eee}
+  i {font-size: 0.9em}
+</style>
+</head>
+<body>
+<h3>Examples with various input types</h3>
+<table>
+  <tr>
+    <td>text input, by id</td>
+    <td><input type="text" id="textinputid" value="some text"></input></td>
+    <td><input data-formula="$VAL($('#textinputid'))" readonly></input></td>
+  </tr>
+<!--
+  <tr>
+    <td>text input, by name</td>
+    <td>$['[name=textinput2']</td>
+    <td><input type="text" name="textinput2" value="some text"></input></td>
+    <td><input data-formula="$['[name=textinput2']" readonly></input></td>
+  </tr>
+  <tr>
+    <td>dropdown select</td>
+    <td>$['#fav_fruit']</td>
+    <td><select id="fav_fruit"><option value="apples">Apples</option><option value="oranges">Oranges</option></select></td>
+    <td><input data-formula="$['#fav_fruit']" readonly></input></td>
+  </tr>
+  <tr>
+    <td colspan=4>For checkboxes and radiobuttons, a boolean is returned indicating if its checked or not. So we need a formula:</td>
+  <tr>
+    <td>checkbox</td>
+    <td>IF($['#newsletter'],'checked', 'not checked')</td>
+    <td><input type="checkbox" id="newsletter"></input></td>
+    <td><input data-formula="IF($['#newsletter'],'checked', 'not checked')" readonly></input></td>
+  </tr>
+  <tr>
+    <td>radiobutton</td>
+    <td>IF($['#radiobtn'],'stuck', 'not pressed')</td>
+    <td><input type="radio" id="radiobtn"></input></td>
+    <td><input data-formula="IF($['#radiobtn'],'stuck', 'not pressed')" readonly></input></td>
+  </tr>
+  <tr>
+    <td colspan=4>Radiobutton groups are not supported. But you can get around it with some nested IF's:</td>
+  <tr>
+  <tr>
+    <td>radiobuttons</td>
+    <td>IF($['#male_id'], 'male', IF($['#female_id'], 'female', IF($['#other_id'], 'other', '')))</td>
+    <td><input type="radio" name="gender" value="male" id="male_id">Male</input><br><input type="radio" name="gender" value="female" id="female_id">Female</input><br><input type="radio" name="gender" value="other" id="other_id">Other</input></td>
+    <td><input data-formula="IF($['#male_id'], 'male', IF($['#female_id'], 'female', IF($['#other_id'], 'other', '')))" readonly></input></td>
+  </tr>-->
+</table>
+
+</body>
+</html>

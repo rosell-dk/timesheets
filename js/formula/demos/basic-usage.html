@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>formula demo</title>
+<script src="../formula.js"></script>
+
+<!-- InputById requires jQuery (or picoquery) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="../library/referencetypes/InputById.js"></script>
+<script>
+/*
+Formula.addFunction('COMPLEXNUMBER', function(a, b) {
+  return new ComplexNumber(this.numberVal(a), this.numberVal(b));
+});
+
+Formula.addFunction('ELMBYID', function(id) {
+  return document.getElementById(id);
+}}
+
+Formula.addFunction('SUM', function() {
+  var result=0;
+  for (var i=0; i<arguments.length; i++) {
+    result+=this.numberVal(arguments[i]);
+  }
+  return result;
+});
+*/
+
+
+// Add some functions
+// ------------------
+
+Formula.addFunction('ADD_TWO_NUMBERS', function(a, b) {
+  return a+b;
+});
+
+Formula.addFunction('CONCAT', function() {
+  var result='', l=arguments.length;
+  for (var i=0; i<l; i++) {
+    result += arguments[i];
+  }
+  return result;
+});
+
+Formula.addFunction('IF', function(test, then, otherwise) {
+  return (test ? then : otherwise);
+});
+
+
+
+
+jQuery(function() {
+//  var formula1 = new Formula('SUM(1,2)');
+//alert(parseFloat('0.0'));
+/*
+  var simpleFormula1 = new Formula('CONCAT("hello ","world")');
+  $('#simple_result1').val(simpleFormula1.calc());
+
+  var simpleFormula2 = new Formula('ADD_TWO_NUMBERS(1,-9)');
+  $('#simple_result2').val(simpleFormula2.calc());
+
+  var simpleFormula3 = new Formula('IF(TRUE,"Yes", "No")');
+  $('#simple_result3').val(simpleFormula3.calc());
+
+  function runConcatFormula() {
+    $('#concat_result').val(concatFormula1.calc());
+  }
+
+  function concatFormulaChanged() {
+    runConcatFormula();
+  }
+
+  var concatFormula1 = new Formula('CONCAT(#string1," ",#string2)', concatFormulaChanged);
+  runConcatFormula();
+//  alert(formula1.calc());
+*/
+  var simpleFormula2 = new Formula('ADD_TWO_NUMBERS(1,19)');
+  $('#simple_result2').val(simpleFormula2.calc());
+
+  var simpleFormula2 = new Formula('ADD_TWO_NUMBERS(1,-9)');
+  $('#simple_result2').val(simpleFormula2.calc());
+  
+
+
+//  var parseErrorTest = new Formula('IF(');  
+//  alert('parse error? ' + parseErrorTest.parseError());
+
+//  var formula2 = new Formula('SUM(1,ELMBYID(test))');
+//  alert(formula2.calc());
+});
+
+</script>
+<style>
+  body {max-width: 800px; padding:2% 5%}
+  label {margin-right: 10px}
+  input[readonly] {background-color: #eee}
+</style>
+</head>
+<body>
+  <h3>Simple formula without references</h3>
+  <label for="simple_result1">CONCAT('hello ','world')</label><input id="simple_result1" readonly></input><br>
+
+  <h3>Another formula without references</h3>
+  <label for="simple_result2">ADD_TWO_NUMBERS(0.1,9)</label><input id="simple_result2" readonly></input><br>
+
+  <h3>Yet another formula without references</h3>
+  <label for="simple_result3">IF(TRUE,"Yes", "No")</label><input id="simple_result3" readonly></input><br>
+
+  <h3>Concat example</h3>
+  <label for="string1">String 1</label><input id="string1" value="hello"></input><br>
+  <label for="string2">String 2</label><input id="string2" value="world"></input><br>
+  <label for="concat_result">CONCAT(#string1," ",#string2)</label><input id="concat_result" readonly></input><br>
+
+</body>
+</html>

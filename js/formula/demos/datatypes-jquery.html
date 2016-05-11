@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>jQuery datatype</title>
+
+<script src="../formula.js"></script>
+
+<!-- The jQuery data type requires jQuery (or picoquery) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="../library/datatypes/JQuery.js"></script>
+
+
+<!-- For convenience add an initializer, allowing us to specify formulas in the data-formula attribute of input fields -->
+<script src="../library/initializers/data-formula-attr.js"></script>
+<script src="../library/initializers/data-formula-attr-show-formula-on-hover.js"></script>
+
+<script>
+
+</script>
+
+<style>
+  body {max-width: 1200px; padding:2% 5%}
+  label {margin-right: 10px; min-width: 190px; display: inline-block;}
+  i {font-size: 0.9em}
+  table {border-collapse: collapse}
+  input {width: 200px; margin-right: 10px;}
+  pre {font-family:monospace; padding: 10px; border: 1px solid #666; background-color: #eee}
+  .subheading {font-size: 0.8em; font-weight: normal}
+  .monospace {font-family:monospace;}
+  input[readonly] {background-color: #eee}
+
+</style>
+</head>
+<body>
+<h2>Examples of jQuery functions<span class="subheading monospace"><br>/library/datatypes/JQuery.js</span></h2>
+
+<h2>Creating a jQuery object</h2>
+<h3>$(a,b)</h3>
+<pre>
+Formula.addFunction('$', function(a, b) {
+  return $(a,b);
+});
+</pre>
+<p>You can create a jQuery object with the "$" function. It reflects the jQuery constructor - the arguments are simply passed. The constructor has several signatures. You can read the full details in the jquery docs <a href="http://api.jquery.com/jquery/">here</a></p>
+<p>Most commonly, however, you will simply call it with a selector ([String]). For example: $('#id') or $('[name=oranges]')</p>
+<p>Here is how the formula is added:</p>
+<h3>$$(a,b)</h3>
+<p>
+Often, you will want your formula to trigger a change event, when one of your referenced fields change.
+For that, the library provides a "$$" function, which does what the "$" function does AND adds eventhandler to the field, the first time it is calculated. So, if you are going to use that, make sure that the formula gets calculated at init. The <a href="initializers-data-formula.html">data-formula-attr</a> initializer does that, by the way.
+</p>
+<p>Alternatively, you can use the jQuery <i>reference type</i> instead (demo available <a href="referencetypes-jquerynodeselector.html">here</a>). Reference types are always bound.</p>
+
+<h2>Using the jQuery object</h2>
+<h3>$VAL</h3>
+<p>Once we got a jQuery object, we can use the other functions to do something with it.
+$VAL returns the result of a "val()" call.</p>
+
+<p>Here, we use it to copy text from one input to the other:</p>
+Source: <input type="text" id="textinputid" value="some text"></input><br>
+Target: <input data-formula="$VAL($('#textinputid'))" readonly></input><br>
+<p>(hover the target field to view the formula)</p>
+
+<p>
+Note that the formula is NOT recalculated automatically, when the value in the source field changes, because we used the "$" function.
+Here is the same example, where we use the $$ function instead:
+</p>
+Source: <input type="text" id="textinputid2" value="some text"></input><br>
+Target: <input data-formula="$VAL($$('#textinputid2'))" readonly></input><br>
+
+
+
+
+<p>By the way, here is how the $VAL function is added:</p>
+<pre>
+Formula.addFunction('$VAL', function($jq) {
+  return $jq.val();
+});
+</pre>
+
+<h3>$ATTR</h3>
+<p>Get the value of an attribute with this function.</p>
+<p>Examples:</p>
+"id" attribute: <input id="attr_example" data-formula="$ATTR($('#attr_example'), 'id')" readonly></input><br>
+"data-formula" attribute: <input id="attr_example" data-formula="$ATTR($('#attr_example'), 'data-formula')" readonly></input><br>
+
+<pre>
+Formula.addFunction('$ATTR', function($jq, attrName) {
+  return $jq.attr(attrName);
+});
+</pre>
+
+<h3>Get the drift?</h3>
+There are no more jQuery functions in the library. But as you can see, you can easily create your own for your own needs
+
+</body>
+</html>

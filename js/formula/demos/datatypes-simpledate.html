@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SimpleDate demo</title>
+
+<script src="../formula.js"></script>
+
+<script src="../library/datatypes/SimpleDate.js"></script>
+
+<!-- InputById requires jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="../library/referencetypes/InputById.js"></script>
+
+<!-- For convenience add an initializer, allowing us to specify formulas in the data-formula attribute of input fields -->
+<script src="../library/initializers/data-formula-attr.js"></script>
+<script src="../library/initializers/data-formula-attr-show-formula-on-hover.js"></script>
+
+<script>
+
+// Set default format
+SimpleDate.defaultFormat = 'MM-DD-YYYY';
+
+
+</script>
+
+<style>
+  body {max-width: 1200px; padding:2% 5%}
+  label {margin-right: 10px; min-width: 190px; display: inline-block;}
+  i {font-size: 0.9em}
+  table {border-collapse: collapse}
+  input {width: 100px; text-align:right; margin-right: 10px;}
+  inlinecode {font-family: monospace}
+  input[readonly] {background-color: #eee}
+</style>
+</head>
+<body>
+<h2>Examples of SimpleDate functions</h2>
+<p>To view the formula behind a field, mouse over it.</p>
+
+<h3>Creating a SimpleDate</h3>
+<p>SIMPLEDATE(year, month, day) will get you a SimpleDate object. Note that month is not zero-based</p>
+<input data-formula="SIMPLEDATE(2020, 12, 24)" readonly></input><br>
+
+<p>SIMPLEDATE_TODAY() will get you today</p>
+<input data-formula="SIMPLEDATE_TODAY()" readonly></input><br>
+
+<h3>Formatting</h3>
+
+<p>
+To format a SimpleDate, use SIMPLEDATE_FORMAT(date [SimpleDate], format [String]). You can use the tokens: YYYY, MM, DD, M, D.
+</p>
+YYYY-MM-DD: <input data-formula='SIMPLEDATE_FORMAT(SIMPLEDATE_TODAY(), "YYYY-MM-DD")' readonly></input><br>
+YYYY-M-D: <input data-formula='SIMPLEDATE_FORMAT(SIMPLEDATE_TODAY(), "YYYY-M-D")' readonly></input><br>
+M/D YYYY: <input data-formula='SIMPLEDATE_FORMAT(SIMPLEDATE_TODAY(), "M/D YYYY")' readonly></input><br>
+<p>
+You can set up a defalt format by setting SimpleFormat.defaultFormat. In this demo, it has been set to 'MM-DD-YYYY'.
+To format a date using the default format, simply calling SIMPLEDATE_FORMAT(date [SimpleDate]):
+</p>
+Using default format: <input data-formula="SIMPLEDATE_FORMAT(SIMPLEDATE_TODAY())" readonly></input><br>
+<p>
+But as the toString method of SimpleDate returns the date formatted using default format, often, there will be no need to do that.
+</p>
+You can simplify the above formula to: <input data-formula="SIMPLEDATE_TODAY()" readonly></input><br>
+
+
+<h3>Parsing</h3>
+<p>
+To parse a SimpleDate, use SIMPLEDATE_PARSE(date[String], format[String]). You can use the tokens: YYYY, MM, DD, M and D
+</p>
+Examples:<br>
+<input data-formula='SIMPLEDATE_PARSE("0309-1972", "DDMM-YYYY")' readonly></input><br>
+<input data-formula='SIMPLEDATE_PARSE("1972-21-2", "YYYY-D-M")' readonly></input><br>
+<input data-formula='SIMPLEDATE_PARSE("39-1972", "DM-YYYY")' readonly></input><br>
+Omitting year: <input data-formula='SIMPLEDATE_PARSE("21-02", "DD-MM")' readonly></input><br>
+
+<p>If parse fails, you will get a SimpleDate object which represents an invalid date.</p>
+Formatting an invalid date results in the string 'Invalid date' (you can change this by setting SimpleDate.invalidDate)
+
+<p>Example:
+Parse error: <input data-formula='SIMPLEDATE_PARSE("21-2-72", "D-M-YYYY")' readonly></input><br>
+Non-existent date: <input data-formula='SIMPLEDATE_PARSE("31-02-1972", "DD-MM-YYYY")' readonly></input><br>
+</p>
+
+<p>You can test if a date is valid with SIMPLEDATE_IS_VALID:
+<input data-formula='SIMPLEDATE_IS_VALID(SIMPLEDATE_PARSE("21-2-72", "D-M-YYYY"))' readonly></input>
+</p>
+
+<p>Not tired out yet? try more parsing below:</p>
+Parse this date: <input id="try_date" value="7/14 1995"></input><br>
+Using this format: <input id="try_format" value="D/M YYYY"></input><br>
+Result: <input data-formula="SIMPLEDATE_PARSE(#try_date, #try_format)"></input><br>
+
+
+
+<h3>Getter/setter methods</h3>
+<p>Use SIMPLEDATE_YEAR([SimpleDate]) to get the year. There is also functions for month and day.</p>
+Examples:
+<table>
+<tr><td>SIMPLEDATE_YEAR</td><td><input data-formula="SIMPLEDATE_YEAR(SIMPLEDATE_TODAY())" readonly></input></td></tr>
+<tr><td>SIMPLEDATE_MONTH</td><td><input data-formula="SIMPLEDATE_MONTH(SIMPLEDATE_TODAY())" readonly></input></td></tr>
+<tr><td>SIMPLEDATE_DAY</td><td><input data-formula="SIMPLEDATE_DAY(SIMPLEDATE_TODAY())" readonly></input></td></tr>
+</table>
+<p>Use SIMPLEDATE_SET_YEAR(date [SimpleDate], year [Number]) to set the year. There is also functions for month and day.</p>
+Examples:
+<table>
+<tr><td>SIMPLEDATE_SET_YEAR</td><td><input data-formula="SIMPLEDATE_SET_YEAR(SIMPLEDATE_TODAY(),2000)" readonly></input></td></tr>
+<tr><td>SIMPLEDATE_SET_MONTH</td><td><input data-formula="SIMPLEDATE_SET_MONTH(SIMPLEDATE_TODAY(),1)" readonly></input></td></tr>
+<tr><td>SIMPLEDATE_SET_DAY</td><td><input data-formula="SIMPLEDATE_SET_DAY(SIMPLEDATE_TODAY(),1)" readonly></input></td></tr>
+</table>
+
+<h3>Adding days</h3>
+<p>You can add days with SIMPLEDATE_ADD_DAYS</p>
+Tomorrow: <input data-formula="SIMPLEDATE_ADD_DAYS(SIMPLEDATE_TODAY(),1)" readonly></input><br>
+Three weeks ago: <input data-formula="SIMPLEDATE_ADD_DAYS(SIMPLEDATE_TODAY(),-21)" readonly></input><br>
+
+
+
+
+</body>
+</html>

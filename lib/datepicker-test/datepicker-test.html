@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <title>Moment Datepicker</title>
+
+
+  <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment.min.js"></script>
+
+  <link href="css/datepicker.css" rel="stylesheet">
+  <script src="js/mdatepicker.min.js"></script>
+  <script src="js/moment-locale-da.js"></script>
+  <style>
+    .datepicker.dropdown-menu {margin-top: 10px;}
+  </style>
+  <script>
+  $(function () {
+      moment.locale('da');
+
+      $('#dp1').mdatepicker({
+          format: 'ddd D. MMM',
+          autoHide: false
+      });
+
+      $('#dp1').on('changeDate', function(e) {
+//        alert(e.date.valueOf);
+        console.log(e);
+        console.log($(e.target).mdatepicker('get').format('YYYY-MM-DD'));
+
+      });
+
+
+      $('#dp2').mdatepicker({
+          format: 'ddd D. MMM',
+          autoHide: true
+      });
+
+  });
+  
+  </script>
+</head>
+<body>
+<input class="form-control" value="01-21-2015" id="dp1" type="text"></input>
+<input class="form-control" value="01-21-2015" id="dp2" type="text"></input>
+
+</body>
+</html>

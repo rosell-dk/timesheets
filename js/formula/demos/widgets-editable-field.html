@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Widget: editablefield</title>
+
+  <!-- All widgets require jquery AND jquery UI -->
+  <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+  <script src="../formula.js"></script>
+  <script src="../library/referencetypes/Element.js"></script>
+
+  <!-- The widget that we are demonstrating here -->
+  <script src="../library/widgets/editablefield.js"></script>
+
+  <script>
+
+  function numVal(obj) {
+    if (typeof obj == 'string') {
+      if (obj == '') {
+        return 0;
+      }
+      return parseFloat(obj);
+    }
+    if (typeof obj == 'number') {
+      return obj;
+    }
+    return NaN;
+  }
+
+  Formula.addFunctions(
+    ['SUM', function() {
+      var result=0;
+      for (var i=0; i<arguments.length; i++) {
+        result += numVal(arguments[i]);
+      }
+      return result;
+    }],
+    ['MANUALLY_EDITED', function(elm) {
+      return $(elm).hasClass('manually-edited');
+    }],
+    ['IF', function(test, a, b) {
+      return (test ? a : b);
+    }],
+    ['MULTIPLY', function() {
+      var result=1;
+      for (var i=0; i<arguments.length; i++) {
+        result *= numVal(arguments[i]);
+      }
+      return result;
+    }],
+    ['DIVIDE', function() {
+      var result = numVal(arguments[0]);
+      for (var i=1; i<arguments.length; i++) {
+        result /= numVal(arguments[i]);
+      }
+      return result;
+    }]
+  );
+  
+
+  function dollarFormatter(text) {
+    return '$' + text;
+  }
+  // Deformat currency
+  function dollarDeformatter(text) {
+    // In this case, we want the user to be allowed
+    // to enter the currency with or without the "$" prepended
+    if (text[0] == '$') {
+      return text.substr(1);
+    }
+    return text;
+  }
+
+  $(function() { 
+
+    $( "#ex1" ).editablefield( {
+      formula: '3',
+      formatter: dollarFormatter,
+      deformatter: dollarDeformatter,
+    });
+    $( "#ex2" ).editablefield( {
+      formula: '3',
+      formatter: dollarFormatter,
+      deformatter: dollarDeformatter,
+      manualValue: 4,
+    });
+
+    Formula.addFunction('FIELD_VALUE', function(elm) {
+//return Math.random(18)
+      return $( elm ).editablefield('getValue');
+    });
+    $( "#ex3" ).editablefield( {
+//      formula: 'SUM(#ex1,FIELD_VALUE(#ex2.element))',
+      formula: 'SUM(FIELD_VALUE(#ex1.element),FIELD_VALUE(#ex2.element))',
+      formatter: dollarFormatter,
+      deformatter: dollarDeformatter,
+    });
+
+    $( "#ex5" ).editablefield( {
+//      formula: 'SUM(#ex1,FIELD_VALUE(#ex2.element))',
+      formula: 'SUM(FIELD_VALUE(#ex3.element),#ex4)',
+      formatter: dollarFormatter,
+      editable: false
+    });
+
+    $( "#ex6" ).editablefield( {
+//      formula: 'SUM(#ex1,FIELD_VALUE(#ex2.element))',
+      formula: 'MANUALLY_EDITED(#ex3.element)',
+      editable: false
+    });
+
+
+    /**
+     *  Format number, two
+     *  0 => '0.00'
+     */
+    function numberFormatterTwoDigits(num) {
+      var text = num.toFixed(2);
+      text = text.replace('.', ',');
+      return text;
+    }
+
+    /**
+     *  Format price. Ie 10000 -> '10000.00'
+     */
+    function numberFormatterTwoDigitsZeroAsEmpty(num) {
+      if (num == 0) {
+        return '';
+      }
+      return numberFormatterTwoDigits(num);
+    }
+
+    /**
+     *  Deformats two-digit number. Ie '10000.00' -> 10000
+     */
+    function numberDeformatterTwoDigits(text) {
+      if (typeof text == 'number') {
+    //alert(text);
+        return text;
+      }
+      if (text == '') {
+        return 0;
+      }
+      return parseFloat(text);
+    }
+
+    $( "#inches" ).on('editablefieldstatechange', function() {
+      if ( $( "#inches" ).hasClass('manually-edited')) {
+        // Make #cm change state to calculated field
+//        $( "#cm" ).val('');
+//        $( "#cm" ).trigger('change');
+      }
+    });
+
+    $( "#cm" ).on('editablefieldstatechange', function() {
+      if ( $( "#cm" ).hasClass('manually-edited')) {
+        // Make #inches change state to calculated field
+//        $( "#inches" ).val('');
+//        $( "#inches" ).trigger('change');
+      }
+    });
+
+    $( "#inches" ).editablefield( {
+//      formula: 'IF(MANUALLY_EDITED(#cm.element),DIVIDE(#cm,2.54),"")',
+      formula: 'DIVIDE(#cm,2.54)',
+      formatter: numberFormatterTwoDigitsZeroAsEmpty,
+      deformatter: numberDeformatterTwoDigits,
+      editable: true
+    });
+    $( "#cm" ).editablefield( {
+//      formula: 'IF(MANUALLY_EDITED(#inches.element),MULTIPLY(#inches,2.54),"")',
+      formula: 'MULTIPLY(#inches,2.54)',
+      formatter: numberFormatterTwoDigitsZeroAsEmpty,
+      deformatter: numberDeformatterTwoDigits,
+      editable: true
+    });
+
+
+
+  });
+
+
+  </script>
+<style>
+  body {max-width: 1200px; padding:2% 5%}
+  input {width: 200px; margin-right: 10px;}
+  pre {font-family:monospace; padding: 10px; border: 1px solid #666; background-color: #eee}
+  input[readonly] {background-color: #eee}
+  td {vertical-align: top}
+  td pre {margin-top: 0px}
+
+  input {
+    background-color: white;
+    color: #666;
+  }
+
+  .editable-field {
+    background-color: #d6e7f3; 
+    color: #000;
+  }
+  .editable-field.manually-edited {
+    background-color: white; 
+  }
+
+
+</style>
+
+</head>
+<body>
+<h3>Widget: EditableField</h3>
+<p>
+The editabale field widget can do the same as the calculatedfield widget. But it also allows users to manually override the calculated value. It even works with a formatter, but you will also have to provide a 'deformater', to allow users to enter values in the same format as your formatter uses.
+</p>
+
+<p>Initially calculated</p>
+<input id="ex1"></input><br>
+
+<p>Initially manually edited</p>
+<input id="ex2"></input><br>
+
+<p>The user can revert a field to calculculated field by clearing the value</p>
+
+<!--Sum: <input id="ex3" data-formula="SUM(FIELD_VALUE(#ex1.element),FIELD_VALUE(#ex2.element))"></input><br>-->
+Sum (editable): <input id="ex3"></input><br>
+
+Extra: <input id="ex4" value="1"></input><br>
+
+Total (not editable): <input id="ex5"></input><br>
+
+<p>The widget adds the class "manually-edited" to a field, when its manually edited.</p>
+<p>This makes it easy to write a function that detects whether a field is manually edited</p>
+<pre>
+Formula.addFunction('MANUALLY_EDITED', function(elm) {
+  return $(elm).hasClass('manually-edited');
+});
+</pre>
+Is sum manually edited? <input id="ex6" ></input><br>
+
+<h3>Circular referencing</h3>
+<p>Below, the user can convert from inches to centimeters, or the other way round. The circular reference actually does not end up in regress, because the formula of a field gets deactivated, when the field is edited.</p>
+<div>
+  <label for="inches">Inches</label>
+  <input id="inches"></input>
+</div>
+<div>
+  <label for="cm">Cm</label>
+  <input id="cm"></input>
+</div>
+
+
+</body>
+</html>
