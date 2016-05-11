@@ -1,7 +1,7 @@
 # timesheets
 Create excell-like timesheets and let your customers view them
 
-![Screenshot](/screenshot.png?raw=true)
+![Screenshot](/screenshot.png?raw=true "Screenshot")
 
 ## Installation
 
