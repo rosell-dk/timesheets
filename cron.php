@@ -39,19 +39,11 @@ the clock, when he stopped)
 
 
 include_once 'inc/db.inc';
+cron_called();
 
-$res = sqlQuery("SELECT t.id as timesheet_id, ev.event_type as event_type, t.customer_id as customer_id FROM timesheet_event_scheduler as ev JOIN timesheets as t on ev.timesheet_id = t.id WHERE ev.time < NOW()");
-while ($row = $res->fetch_assoc()) {
-  $timesheet_id = $row['timesheet_id'];
-  $customer_id = $row['customer_id'];
-  $event_type = $row['event_type'];
-
-//    notify($notification_type);
-  notify($customer_id, $event_type);
-//  sqlQuery("DELETE FROM notification_scheduler WHERE timesheet_id = " . $timesheet_id . " AND notification_type = " . sqlVal($notification_type));
-}
 
 //send_email('bjorn@rosell.dk, dr.sofia.dahl@gmail.com', 'dette er en test', 'tjekker bare lige om email-funktionaliteten dur');
+//send_email('bjorn@rosell.dk', 'cron.php was run...', 'just testing...');
 
 
 // $subject = 'Bjorn arbejder nu paa [timesheet:title], [timesheet:last_task] (siden kl.[timesheet:last_starttime]) [timesheet:link]';

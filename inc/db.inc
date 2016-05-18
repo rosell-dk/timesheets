@@ -69,6 +69,31 @@ CREATE TABLE notifications (
     FOREIGN KEY (customer_id) REFERENCES customers(id)
 );*/
 
+function cron_called() {
+  send_waiting_timesheet_notifications();
+}
+
+function send_waiting_timesheet_notifications() {
+
+  // Delete outdated notifications that for some reason are in the queue (eg. due to cron failure)
+  // 12 hours is too old for our taste
+  sqlQuery("DELETE FROM timesheet_event_scheduler WHERE DATE_ADD(time, INTERVAL 12 HOUR) < NOW()");
+
+  // Fetch notifications that are ready
+  $res = sqlQuery("SELECT t.id as timesheet_id, ev.event_type as event_type, t.customer_id as customer_id FROM timesheet_event_scheduler as ev JOIN timesheets as t on ev.timesheet_id = t.id WHERE ev.time < NOW()");
+
+  while ($row = $res->fetch_assoc()) {
+    $timesheet_id = $row['timesheet_id'];
+    $customer_id = $row['customer_id'];
+    $event_type = $row['event_type'];
+
+
+  //    notify($notification_type);
+    notify($customer_id, $event_type, $timesheet_id);
+    sqlQuery("DELETE FROM timesheet_event_scheduler WHERE timesheet_id = " . $timesheet_id . " AND event_type = " . sqlVal($event_type));
+  }
+}
+
 function replaceTimesheetTokens($timesheet_id, $text) {
   $res = sqlQuery("SELECT title, last_task, last_starttime, last_endtime FROM timesheets WHERE id=" . $timesheet_id);
   if ($res->num_rows == 0) {
@@ -91,39 +116,59 @@ function replaceTimesheetTokens($timesheet_id, $text) {
         break;
       case '[timesheet:link]':
         global $settings;
-        $text = str_replace($token, $settings['url'] . 'index.php?timesheet=' . $timesheet_id, $text);        
+        $text = str_replace($token, $settings['url'] . 'timesheets.php?timesheet=' . $timesheet_id, $text);        
     }
   }
   return $text;
 }
-function notify($customer_id, $event_type) {
-//  echo 'notify:' . $customer_id . ':' . $event_type;
+function notify($customer_id, $event_type, $timesheet_id) {
+  echo 'notify:' . $customer_id . ':' . $event_type . '<br>';
 
   $res = sqlQuery("SELECT * FROM email_notifications WHERE customer_id=" . $customer_id);
   if ($res->num_rows == 0) {
     return;
   }
-  $row = $rows->fetch_assoc();
+  $row = $res->fetch_assoc();
 
+  $eventNames = json_decode($row['events']);
+  // Check if customer has subscribed to this event
+  if (!in_array($event_type, $eventNames)) {
+    return;
+  }
+
+  // Check if there is any emails entered
   if (empty($row['emails'])) {
     return;
   }
-  $eventIds = json_decode($row['events']);
+  $emails = $row['emails'];
 
-
-/*
-  $res = sqlQuery("SELECT * FROM notifications WHERE customer_id=" . $customer_id . " AND event_type=" . sqlVal($event_type));
-  if ($res->num_rows == 0) {
-    return;
-  }*/
   if ($event_type == 'timesheet_work_started') {
-    $subject = 'Bjørn arbejder nu på [timesheet:title][timesheet:last_task] (siden [timesheet:last_starttime])';
-    $body = '[timesheet_task_breakdown]';
+    $subject = replaceTimesheetTokens($timesheet_id, 'Bjørn arbejder nu på [timesheet:title], [timesheet:last_task] (siden [timesheet:last_starttime])');
+    $body = replaceTimesheetTokens($timesheet_id, 'Link til timeseddel: [timesheet:link]'); // [timesheet_task_breakdown]
+    send_email($emails, $subject, $body);
+    return;
   }
-  $row = $rows->fetch_assoc();
-  if (!empty($row['emails'])) {
+  if ($event_type == 'timesheet_work_stopped') {
+    $subject = replaceTimesheetTokens($timesheet_id, 'Bjørn har stoppet arbejdet på [timesheet:title] (kl. [timesheet:last_endtime])');
+    $body = replaceTimesheetTokens($timesheet_id, 'Link til timeseddel: [timesheet:link]'); // [timesheet_task_breakdown]
+    send_email($emails, $subject, $body);
+    return;
+  }
+  if ($event_type == 'timesheet_task_switched') {
+    $subject = replaceTimesheetTokens($timesheet_id, 'Bjørn har skiftet task på [timesheet:title]: [timesheet:last_task])');
+    $body = replaceTimesheetTokens($timesheet_id, 'Link til timeseddel: [timesheet:link]'); // [timesheet_task_breakdown]
+    send_email($emails, $subject, $body);
+    return;
+  }
+
+
+  if (empty($subject)) {
+    return;
+  }
+
+/*  if (!empty($row['emails'])) {
     notify_email($customer_id, $event_type, $row['emails'], $row['email_template_subject'], $row['email_template_text']);
-  }
+  }*/
 }
 
 function notify_email($customer_id, $event_type, $emails, $email_template_subject, $email_template_body) {
@@ -139,6 +184,8 @@ function notify_email($customer_id, $event_type, $emails, $email_template_subjec
 }
 
 function send_email($emails, $subject, $body) {
+  echo 'send_email:' . $emails . '<br>subject: ' . $subject . '<br>body: ' . $body;
+//return
   include_once 'lib/Maker.php';
   global $settings;
   $m = new rosell\Maker();

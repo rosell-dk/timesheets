@@ -42,12 +42,33 @@ $(function() {
     $notificationsSelect = manageNotificationsDialog.find('#notifications_events');
     $notificationsSelect.find('*').remove();
 
+/*
+    var events = [
+      {"id":"1","event_name":"timesheet_work_started"},
+      {"id":"2","event_name":"timesheet_work_ended"}
+    ];
+
+    for (var i=0; i<events.length; i++) {
+      $notificationsSelect.append('<option value="' + events[i]['id'] + '">' + events[i]['event_name'] + '</option>');
+    }*/
+
+    var events = [
+      {"event_name":"timesheet_work_started"},
+      {"event_name":"timesheet_work_ended"},
+      {"event_name":"timesheet_task_switched"}
+    ];
+
+    for (var i=0; i<events.length; i++) {
+      $notificationsSelect.append('<option value="' + events[i]['event_name'] + '">' + events[i]['event_name'] + '</option>');
+    }
+
+/*
     ajax('get_available_events', {}, 'Kunne ikke hente liste over events.', function(data) {
       console.log(data);
       for (var i=0; i<data.length; i++) {
         $notificationsSelect.append('<option value="' + data[i]['id'] + '">' + data[i]['event_name'] + '</option>');
       }
-    });
+    });*/
 
     if (isAdmin) {
       $customersSelect = manageNotificationsDialog.find('#notifications_customer');

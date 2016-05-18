@@ -54,9 +54,9 @@ function startWorking() {
   $('#sheet tr:not(:last-child) [data-colname=date]').each(function () {
     if (this != $date.get(0)) {
       if ($(this).val() == $date.val()) {
-        console.log($(this).val())
+/*        console.log($(this).val())
         console.log('equals');
-        console.log($date.val())
+        console.log($date.val())*/
         $date.val('');
       }
     }
@@ -65,7 +65,7 @@ function startWorking() {
   var $startTime = $row.find('[data-colname=starttime]');
   $startTime.cell('setValue', now);
 
-  if ($prevRow.length == 1) {
+  if ($prevRow.attr('id') != 'template_row') {
     var $prevEndTime = $prevRow.find('[data-colname=endtime]');
     if ($prevEndTime.val() == '') {
       $prevEndTime.cell('setValue', now);

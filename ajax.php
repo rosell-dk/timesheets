@@ -56,9 +56,30 @@ function notifyMakerTimesheetUpdated($timesheetId) {
 
 }
 
+function deleteTimesheetEvent($timesheet_id, $event_type) {
+  sqlDelete('timesheet_event_scheduler', 'timesheet_id=' . $timesheet_id . " AND event_type='" . $event_type . "'");
+}
+
+function isTimesheetEventScheduled($timesheet_id, $event_type) {
+  $res = sqlQuery("SELECT time FROM timesheet_event_scheduler WHERE timesheet_id = " . $timesheet_id . " AND event_type = " . sqlVal($event_type));
+  return ($res->num_rows > 0);
+}
+
 function scheduleTimesheetEvent($timesheet_id, $event_type, $seconds) {
 
-  sqlDelete('timesheet_event_scheduler', 'timesheet_id=' . $timesheet_id . " AND event_type='" . $event_type . "'");
+  // If there already is a "timesheet_work_started" scheduled, we want to
+  // keep that - with the old timestamp
+  // TODO: Even though old timestamp is kept, when notifications are sent, 
+  // values such as [timesheet:last_starttime] do not reflect the first change,
+  // but the current state of the timesheet.
+  if ($event_type == 'timesheet_work_started') {
+    if (isTimesheetEventScheduled($timesheet_id, $event_type)) {
+      return;
+    }
+  }
+
+  deleteTimesheetEvent($timesheet_id, $event_type);
+
 /*
   $insert = array(
     'timesheet_id' => $timesheet_id,
@@ -71,6 +92,7 @@ function scheduleTimesheetEvent($timesheet_id, $event_type, $seconds) {
 
   return $success;
 }
+
 
 /*   GET TIMESHEET
 ---------------------- */
@@ -91,6 +113,7 @@ if ($action == 'get_timesheet') {
 
 /*   GET AVAILABLE EVENTS
 -------------------------- */
+/*
 if ($action == 'get_available_events') {
   $res = sqlQuery("SELECT id, event_name from events");
   $events = array();
@@ -105,7 +128,7 @@ if ($action == 'get_available_events') {
     'data' => $events
   );
   echo json_encode($response);
-}
+}*/
 
 /*   SET NOTIFICATIONS
 -------------------------- */
@@ -148,7 +171,7 @@ For that, use 'update_timesheet_meta'
 if ($action == 'set_timesheet') {
   $id = $_POST['id'];
 
-  $beforeChangeRow = $mysqli->query("SELECT currently_working, total from timesheets WHERE id = '" . $id . "'")->fetch_assoc();
+  $beforeChangeRow = $mysqli->query("SELECT currently_working, total, last_task from timesheets WHERE id = '" . $id . "'")->fetch_assoc();
 
   $update = array(
     'data' => $_POST['data'],
@@ -163,10 +186,26 @@ if ($action == 'set_timesheet') {
   if ($success) {
 //    $success = $mysqli->query("INSERT INTO timesheet_revisions(timesheet_id,data) VALUES (" . $id . ",'" . $data . "')");
 
+    if (($beforeChangeRow['last_task'] != $update['last_task']) && ($beforeChangeRow['currently_working'] == $update['currently_working'])) {
+      if (!isTimesheetEventScheduled($id, 'timesheet_work_started')) {
+        if (!scheduleTimesheetEvent($id, 'timesheet_task_switched', 60)) {
+          echo '{"success":false, "errormsg": "' . $mysqli->error . '"}';
+        }
+      }
+    }
+
     if ($beforeChangeRow['currently_working'] != $update['currently_working']) {
       // 'currently_working' changed
 
       if ($update['currently_working'] == 1) {
+        // work has started
+        // If there exist a work_stopped notification for this timesheet, remove it,
+        // because we dont want to send both a work_started and a work_stopped notification
+        // when switching tasks.
+        // (this however usually wont happen, because if switch task by clicking "start working",
+        //  there is no save when currently_working is 0)
+        deleteTimesheetEvent($id, 'timesheet_work_stopped');
+
         if (!scheduleTimesheetEvent($id, 'timesheet_work_started', 60)) {
           echo '{"success":false, "errormsg": "' . $mysqli->error . '"}';
         }

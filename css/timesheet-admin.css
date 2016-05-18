@@ -1,5 +1,7 @@
 
 #edit-description {cursor: pointer; padding-left: 15px; font-weight: bold; color: green}
+#database_admin > a {color: black; text-decoration: none;}
+#database_admin {margin-top: 15px}
 
 /* Dialog: Create timesheet */
 #dialog_create_timesheet {}

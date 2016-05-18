@@ -29,7 +29,7 @@
       }
     </style>    
   </head>
-  <body onload="window.location='index.php'">      
+  <body onload="window.location='/'">      
     <div>
       <h2>Hej hej!</h2><?php echo $_COOKIE['login'] ?>
     </div>

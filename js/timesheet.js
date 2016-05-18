@@ -17,7 +17,7 @@ function timeOrEmptyDeformatter(text) {
   return SimpleTime.parse(text);
 }
 
-function twoDigitsFormatterZeroAsEmpty(num) {
+function twoDigitsFormatter(num) {
   if (typeof num == 'string') {
     // assume it is already formatted
     return num;
@@ -29,7 +29,9 @@ function twoDigitsFormatterZeroAsEmpty(num) {
   }
 }
 function factoryHoursFormatter(num) {
-  var text = twoDigitsFormatterZeroAsEmpty(num);
+//  console.log(num);
+//  console.log(typeof num)
+  var text = twoDigitsFormatter(num);
   text = text.replace('.', ',');
   if (text.length > 0) {
     text += 't';
@@ -121,8 +123,12 @@ Formula.addFunctions(
     var endTime = SimpleTime.parse(endTimeStr);
     if ((!SimpleTime.isValidSimpleTime(startTime)) || (!SimpleTime.isValidSimpleTime(endTime))) {
 //        console.log(startTime);
+      // Let empty string indicate that it cannot be calculated yet.
+      // factoryHoursFormatter will make sure to format accordingly (as empty cell)
+      // $SUM can handle empty strings
       return '';
     }
+//console.log('used time set to:' + SimpleTime.subtract(endTime, startTime).toFactoryTime());
     return SimpleTime.subtract(endTime, startTime).toFactoryTime();
 
   }]
@@ -194,7 +200,9 @@ function addRow() {
 //      value: new SimpleTime(10,10)
   });
 
+
   $row.find( ".starttime" ).timeEntry();
+
   $row.find( ".endtime" ).timeEntry({
     beforeShow: function(input) {
       var starttime = $(input).closest('tr').find('.starttime').val();
