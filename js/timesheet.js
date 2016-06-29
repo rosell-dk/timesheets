@@ -531,17 +531,49 @@ function loadSheetList() {
   ajax('get_timesheet_list', {}, 'Kunne ikke hente liste over timesedler.', function(data) {
     $('#timesheet_list').find('*').remove();
     $('#timesheet_list').append('<h3>Timesedler</h3>');
+    $('#timesheet_list').append('<div id="accordion"></div>');
+
+    $accordion = $('#accordion');
+    $accordion.append('<h3>Aktive</h3><div id="active"></div>');
+    $accordion.append('<h3>Færdige</h3><div id="completed"></div>');
+    $accordion.append('<h3>Fakturerede</h3><div id="billed"></div>');
+
+    $active = $('#active');
+    $completed = $('#completed');
+    $billed = $('#billed');
+
+    $('#show_billed').click(function() {
+//      alert()
+      $('.timesheet-link').css('display', 'none');
+      $('.timesheet-link.billed').css('display', 'block');
+      $('#show_billed').text('Vis ikke-fakturerede');
+    });
 
     var doesLastViewedSheetExist = false;
     var lastViewedTimesheetId = getCookie('last_viewed_timesheet');
 
     for (var i=0; i<data.length; i++) {
       var timesheet = data[i];
-      $('#timesheet_list').append($('<span class="timesheet-link no-select" data-id="' + timesheet['id'] + '">' + timesheet['title'] + '</span>'));
+      $link = $('<span class="timesheet-link no-select" data-id="' + timesheet['id'] + '">' + timesheet['title'] + '</span>');
+      if (timesheet['active'] == 1) {
+        $active.append($link);
+      }
+      else {
+        if (timesheet['billed'] == 1) {
+          $billed.append($link);
+        }
+        else {
+          $completed.append($link);
+        }
+      }
       if (timesheet['id'] == lastViewedTimesheetId) { 
         doesLastViewedSheetExist = true;
       }
     }
+    $accordion.find('h3').each(function () {
+      $(this).text($(this).text() + ' (' + $(this).next().find('.timesheet-link').length + ')');
+    });
+    $accordion.accordion();
     $('.timesheet-link').click(function() {
       loadSheet($(this).attr('data-id'));
     });

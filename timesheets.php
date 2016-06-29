@@ -61,7 +61,7 @@ http://www.sitepoint.com/10-jquery-time-picker-plugins/
   <tr>
     <td id="col1">
       <div id="timesheet_list"></div>
-      <hr>
+      <br><hr>
       <div id="admin_links">
         <div id="manage_notifications">Tilpas notifikationer</div>
       <?php if (isAdmin()) { ?>

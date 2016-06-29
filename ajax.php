@@ -227,7 +227,7 @@ if ($action == 'set_timesheet') {
 /*   GET TIMESHEET LIST
 -------------------------- */
 if ($action == 'get_timesheet_list') {
-  $sql = "SELECT id,title from timesheets";
+  $sql = "SELECT id,title,active,billed from timesheets";
   if (!$_SESSION['admin']) {
     $sql .= " WHERE customer_id = " . $_SESSION['customer_id'];
   }
@@ -236,7 +236,9 @@ if ($action == 'get_timesheet_list') {
   while ($row = $res->fetch_assoc()) {
     $timesheets[] = array(
       'id' => $row['id'],
-      'title' => $row['title']
+      'title' => $row['title'],
+      'active' => $row['active'],
+      'billed' => $row['billed'],
     );
   }
   $response = array(
